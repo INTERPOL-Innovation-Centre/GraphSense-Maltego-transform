@@ -3,8 +3,11 @@ This tranform provided by our Swiss colleagues aims at querying GraphSense data 
 We have chosen to restrict this repository to LEAs.<br>
 The tranform enables simple queries on GraphSense data and tag-packs to obtain transaction graphs in Maltego.<br>
 Graphsense works for BCT, BCH, LTC and DASH.<br>
+## Author
+Vincent Graber
+[github/grarbervi](https://github.com/grabervi)
 ## Disclaimer
-Please do not share outside LEA circles, this is [TLP:AMBER]<br>
+Please do not share outside LEA circles, this is [TLP:AMBER]
 ##
 ### INSTALL
 To setup and configure this transform you will need to have a working API Key which you can optain via the Austrian Institute of Technology at [graphsense.info](https://graphsense.info).
@@ -15,11 +18,10 @@ pip install canari
 git clone https://github.com/INTERPOL-Innovation-Centre/GraphSense-Maltego-transform.git
 cd GraphSense-Maltego-transform
 ```
-Update the .py to include your own API key.
+Update the .py to include your own API key.<br>
 Line xxx
 ```
 canari create-profile
 ```
-Import ethereum.mtz into maltego
-
+Import the .mtz file into maltego<br>
 Blockchain.info entities should be installed.
