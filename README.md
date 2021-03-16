@@ -8,20 +8,51 @@ Vincent Graber
 [github/grarbervi](https://github.com/grabervi)
 ## Disclaimer
 Please do not share outside LEA circles, this is [TLP:AMBER]
-##
-### INSTALL
-To setup and configure this transform you will need to have a working API Key which you can optain via the Austrian Institute of Technology at [graphsense.info](https://graphsense.info).
-We can help you liaise with the team.<br>
---This is work in progress-- We will update this page as we include the transforms python scripts and setup procedure.<br>
+
+## Installation
+
+Works with Python3
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required python librairies.
+
+Microsoft Visual C++ 14.0 is required to install [maltego-trx](https://github.com/paterva/maltego-trx)
+
+```bash
+pip install maltego-trx
+pip install requests
 ```
-pip install canari
-git clone https://github.com/INTERPOL-Innovation-Centre/GraphSense-Maltego-transform.git
-cd GraphSense-Maltego-transform
+
+## Config
+
+You need to provide your token from the GraphSense API in the config.json file:
+
+- `token`: *12345*
+- `api`: https://api.graphsense.info
+- `currency`: btc
+
+## Local Run
+
+To run a local transform, you will need to pass the following arguments:
+
+``` bash
+project.py local graphsense BTCAddress
 ```
-Update the .py to include your own API key.<br>
-Line xxx
-```
-canari create-profile
-```
-Import the .mtz file into maltego<br>
-Blockchain.info entities should be installed.
+
+## Maltego Local Transform Installation
+
+You need to install the `Blockchain.info (Bitcoin) by Paterva` from the Maltego Transform Hub to work with Bitcoin Address Entity
+
+Go to the Transforms Tab and add a New Local Transform.
+
+Choose `Bitcoin Address [maltego.BTCAddress]` in the `Input entity type`.
+
+In the command path, you need to provide the path to your python3 executable.
+Should be *C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe* by default on Windows 10
+
+In Parameters box put `project.py local graphsense` as it is our entry script.
+
+Put the path of this project as the `Working directory`
+
+Finish
+
+You can now use it in a Maltego Graph.
