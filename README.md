@@ -2,14 +2,18 @@
 This tranform provided by our Swiss colleagues aims at querying GraphSense data directly in Maltego.<br>
 We have chosen to restrict this repository to LEAs.<br>
 The tranform enables simple queries on GraphSense data and tag-packs to obtain transaction graphs in Maltego.<br>
-Graphsense works for BCT, BCH, LTC and DASH.<br>
+Graphsense works for BTC, BCH, LTC and DASH. This transform is only for BTC for now.<br>
+
+![Alt text](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag") <br>
+Illustration image from Maltego<br>
+
 ## Author
 Vincent Graber
 [github/grarbervi](https://github.com/grabervi)
 ## Disclaimer
 Please do not share outside LEA circles, this is [TLP:AMBER]
 
-## Installation
+## Prerequisit
 
 Works with Python3
 
@@ -22,37 +26,36 @@ pip install maltego-trx
 pip install requests
 ```
 
-## Config
+## Configuration
 
-You need to provide your token from the GraphSense API in the config.json file:
+You need to provide your own token from the GraphSense API.<br>
+Simply edit the *config.json* file to add your own API Token:
 
 - `token`: *12345*
 - `api`: https://api.graphsense.info
 - `currency`: btc
 
-## Local Run
+## Installation of the required transforms inside Maltego
 
-To run a local transform, you will need to pass the following arguments:
+In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego Transform Hub to work with Bitcoin Address Entities.
 
-``` bash
-project.py local graphsense BTCAddress
-```
+In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.
 
-## Maltego Local Transform Installation
+In the *Input entity type*, choose:
+```Bitcoin Address [maltego.BTCAddress]```
 
-You need to install the `Blockchain.info (Bitcoin) by Paterva` from the Maltego Transform Hub to work with Bitcoin Address Entity
+In the *Command line* box, provide the path to your python3 executable:<br>
+- ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check one your own machine for the exact path.<br>
+- ```python3``` by default for Mac OS X. (See "troubleshooting on Mac" below if you experience problems).
 
-Go to the Transforms Tab and add a New Local Transform.
+In the *Command parameters* box, type:<br>
+```project.py local graphsense```
 
-Choose `Bitcoin Address [maltego.BTCAddress]` in the `Input entity type`.
+In the *Working directory* box, insert the full path to the folder where you have cloned this project.
 
-In the command path, you need to provide the path to your python3 executable.
-Should be *C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe* by default on Windows 10
+-- Done ! --
 
-In Parameters box put `project.py local graphsense` as it is our entry script.
+You can now use this transform in a Maltego Graph starting from a BTC address.
 
-Put the path of this project as the `Working directory`
-
-Finish
-
-You can now use it in a Maltego Graph.
+Troubleshooting for Mac<br>
+On Mac OS X it is important to check that the above pip is installing the modules in the same python3 as Maltego expects. To check which Python Maltego is effectively using, set the tranform with the `Command line` box as `which` and the `Command parameters` box as `python3`. Run the transform once and look for the result in debug output box. This will give you the path to the python version used. It needs to be the same as the pip used above (check by runing ```pip -V``` in terminal).
