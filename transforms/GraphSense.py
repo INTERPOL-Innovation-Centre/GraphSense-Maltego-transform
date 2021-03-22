@@ -16,8 +16,8 @@ class GraphSense(DiscoverableTransform):
     def create_entities(cls, request, response):
         bitcoin_address = request.Value.strip()
         #print("Bitcoin : " + bitcoin_address)
-        entity_note = ""
-        GraphSenseTag = ""
+        #entity_note = ""
+        #GraphSenseTag = ""
         
         try:
             GraphSenseTag = cls.get_details(bitcoin_address)
@@ -64,14 +64,15 @@ class GraphSense(DiscoverableTransform):
                 req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
                 address = req.json()
                 if "tags" in address:
-                    tags = address["tags"]
-                    if len(tags) > 0:
-                        tag = tags[0] #by default
+                    entity_tags = address["tags"]
+                    tag = ""
+                    if len(entity_tags) > 0:
+                        entity_tag = entity_tags[0] #by default
                         i=0
                         go_again = True
                         while go_again and i < len(tags):
-                            if "source" in tag: #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
-                                tag = tags[i]
+                            if "source" in entity_tag: #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
+                                entity_tag = entity_tags[i]
                                 go_again = False
                             i = i + 1
         except Exception as e:
