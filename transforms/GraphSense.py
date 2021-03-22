@@ -23,15 +23,15 @@ class GraphSense(DiscoverableTransform):
             GraphSenseTag = cls.get_details(bitcoin_address)
             if GraphSenseTag:
                 if "label" in GraphSenseTag:
-                    entity = response.addEntity(Phrase, str(GraphSenseTag["label"]))
+                    entity = response.addEntity(Phrase, GraphSenseTag["label"])
                     entity.setLinkLabel("To tags [GraphSense]")
                     entity.setType("maltego.CryptocurrencyOwner")
                     if "category" in GraphSenseTag:
-                        entity.addProperty("OwnerType", "loose", str(GraphSenseTag["category"]))
+                        entity.addProperty("OwnerType", "loose", GraphSenseTag["category"])
                     if "source" in GraphSenseTag:
-                        entity_note = "Source : " + str(GraphSenseTag["source"] + "\n")
+                        entity_note = "Source : " + GraphSenseTag["source"] + "\n"
                     if "abuse" in GraphSenseTag:
-                        entity_note = str(entity_note) + "Abuse : " + str(GraphSenseTag["abuse"])
+                        entity_note = entity_note + "Abuse : " + GraphSenseTag["abuse"]
                     if entity_note:
                         entity.setNote(entity_note)
             else:
@@ -49,7 +49,8 @@ class GraphSense(DiscoverableTransform):
     @staticmethod
     def get_details(bitcoin_address):
         wallet_tag_label = ""
-
+        req = ""
+        tag = ""
         config = GraphSense.load_config()
         try:
             req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address, headers={'Authorization': config["token"]})
@@ -60,21 +61,21 @@ class GraphSense(DiscoverableTransform):
                     tag = tags[0]
                     if "label" in tag:
                         wallet_tag_label = tag["label"]
-            if not wallet_tag_label: #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
-                req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
-                address = req.json()
-                if "tags" in address:
-                    entity_tags = address["tags"]
-                    tag = ""
-                    if len(entity_tags) > 0:
-                        entity_tag = entity_tags[0] #by default
-                        i=0
-                        go_again = True
-                        while go_again and i < len(tags):
-                            if "source" in entity_tag: #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
-                                entity_tag = entity_tags[i]
-                                go_again = False
-                            i = i + 1
+                if not wallet_tag_label: #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
+                    req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
+                    address = req.json()
+                    if "tags" in address:
+                        entity_tags = address["tags"]
+                        #tag = ""
+                        if len(entity_tags) > 0:
+                            entity_tag = entity_tags[0] #by default
+                            i=0
+                            go_again = True
+                            while go_again and (i < len(entity_tags)):
+                                if "source" in entity_tag: #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
+                                    tag = entity_tags[i]
+                                    go_again = False
+                                i = i + 1
         except Exception as e:
             print(e)
         return tag
