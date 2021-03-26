@@ -69,21 +69,18 @@ class GraphSense(DiscoverableTransform):
                     tag = tags[0]
                     if "label" in tag:
                         wallet_tag_label = tag["label"]
-                if not wallet_tag_label: #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
+                #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
+                if not wallet_tag_label: 
+                    # Test address : 15G9wyGRDssFXsfwEm1ihdJs2xabVPDu68
                     req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
                     address = req.json()
                     if "tags" in address:
                         entity_tags = address["tags"]
-                        #tag = ""
-                        if len(entity_tags) > 0:
-                            entity_tag = entity_tags[0] #by default
-                            i=0
-                            go_again = True
-                            while go_again and (i < len(entity_tags)):
-                                if "source" in entity_tag: #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
-                                    tag = entity_tags[i]
-                                    go_again = False
-                                i = i + 1
+                        for entity_tag in entity_tags:
+                            #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
+                            if "source" in entity_tag:
+                                tag = entity_tag
+                                break
         except Exception as e:
             print(e)
         return tag
