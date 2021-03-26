@@ -1,6 +1,6 @@
 from maltego_trx.entities import Phrase
 
-from maltego_trx.maltego import UIM_PARTIAL
+from maltego_trx.maltego import UIM_PARTIAL, UIM_FATAL
 from maltego_trx.transform import DiscoverableTransform
 import sys
 import requests
@@ -17,21 +17,23 @@ class GraphSense(DiscoverableTransform):
         bitcoin_address = request.Value.strip()
         #print("Bitcoin : " + bitcoin_address)
         #entity_note = ""
-        #GraphSenseTag = ""
+        #graphsense_tag = ""
         
         try:
-            GraphSenseTag = cls.get_details(bitcoin_address)
-            if GraphSenseTag:
-                if "label" in GraphSenseTag:
-                    entity = response.addEntity(Phrase, GraphSenseTag["label"])
+            graphsense_tag = cls.get_details(bitcoin_address)
+            if graphsense_tag:
+                if "error" in graphsense_tag:
+                    response.addUIMessage(graphsense_tag["error"]["message"], messageType=UIM_FATAL)
+                if "label" in graphsense_tag:
+                    entity = response.addEntity(Phrase, graphsense_tag["label"])
                     entity.setLinkLabel("To tags [GraphSense]")
                     entity.setType("maltego.CryptocurrencyOwner")
-                    if "category" in GraphSenseTag:
-                        entity.addProperty("OwnerType", "loose", GraphSenseTag["category"])
-                    if "source" in GraphSenseTag:
-                        entity_note = "Source : " + GraphSenseTag["source"] + "\n"
-                    if "abuse" in GraphSenseTag:
-                        entity_note = entity_note + "Abuse : " + GraphSenseTag["abuse"]
+                    if "category" in graphsense_tag:
+                        entity.addProperty("OwnerType", "loose", graphsense_tag["category"])
+                    if "source" in graphsense_tag:
+                        entity_note = "Source : " + graphsense_tag["source"] + "\n"
+                    if "abuse" in graphsense_tag:
+                        entity_note = entity_note + "Abuse : " + graphsense_tag["abuse"]
                     if entity_note:
                         entity.setNote(entity_note)
             else:
@@ -51,7 +53,13 @@ class GraphSense(DiscoverableTransform):
         wallet_tag_label = ""
         req = ""
         tag = ""
+
         config = GraphSense.load_config()
+        if "token" not in config or "currency" not in config or "api" not in config:
+            return {"error": {"message":"Can not load data from config.json file"}}
+        if config["token"] == "YOUR TOKEN":
+            return {"error": {"message":"No GraphSense token have been set in the config.json file"}}
+
         try:
             req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address, headers={'Authorization': config["token"]})
             address = req.json()
