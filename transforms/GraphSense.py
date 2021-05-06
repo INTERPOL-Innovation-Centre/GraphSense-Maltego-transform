@@ -4,23 +4,20 @@ from maltego_trx.maltego import UIM_PARTIAL, UIM_FATAL
 from maltego_trx.transform import DiscoverableTransform
 import sys
 import requests
+import re as regex
 import json
 
 
 class GraphSense(DiscoverableTransform):
     """
-    Lookup the name associated with a bitcoin address.
+    Lookup the name associated with a Virtual_Asset address.
     """
 
     @classmethod
     def create_entities(cls, request, response):
-        bitcoin_address = request.Value.strip()
-        #print("Bitcoin : " + bitcoin_address)
-        #entity_note = ""
-        #graphsense_tag = ""
-        
+        Virtual_Asset_address = request.Value.strip()
         try:
-            graphsense_tag = cls.get_details(bitcoin_address)
+            graphsense_tag = cls.get_details(Virtual_Asset_address)
             if graphsense_tag:
                 if "error" in graphsense_tag:
                     response.addUIMessage(graphsense_tag["error"]["message"], messageType=UIM_FATAL)
@@ -37,7 +34,7 @@ class GraphSense(DiscoverableTransform):
                     if entity_note:
                         entity.setNote(entity_note)
             else:
-                response.addUIMessage("The Bitcoin address was not found")
+                response.addUIMessage("The Virtual_Asset address was not found")
         except Exception as e:
             print(e)
             response.addUIMessage("An error occurred", messageType=UIM_PARTIAL)
@@ -49,10 +46,28 @@ class GraphSense(DiscoverableTransform):
         return config
 
     @staticmethod
-    def get_details(bitcoin_address):
+    def get_details(Virtual_Asset_address):
         wallet_tag_label = ""
+        currency = ""
         req = ""
         tag = ""
+        
+        #supported_currencies are "btc", "bch", "ltc", "zec", "eth"
+        Virtual_Asset_match = regex.search(r"\b([13][a-km-zA-HJ-NP-Z1-9]{25,34})|bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})\b", Virtual_Asset_address)
+        if Virtual_Asset_match:
+           currency = "btc"
+        else :
+           Virtual_Asset_match = regex.search(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{25,33}\b", Virtual_Asset_address)
+           if Virtual_Asset_match:
+              currency = "ltc"
+           else :
+              Virtual_Asset_match = regex.search(r"\b[tz][13][a-km-zA-HJ-NP-Z1-9]{33}\b", Virtual_Asset_address)
+              if Virtual_Asset_match:
+                 currency = "zec"
+              else :
+                 Virtual_Asset_match = regex.search(r"\b(0x)?[0-9a-fA-F]{40}\b", Virtual_Asset_address)
+                 if Virtual_Asset_match:
+                    currency = "eth"
 
         config = GraphSense.load_config()
         if "token" not in config or "currency" not in config or "api" not in config:
@@ -61,7 +76,7 @@ class GraphSense(DiscoverableTransform):
             return {"error": {"message":"No GraphSense token have been set in the config.json file"}}
 
         try:
-            req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address, headers={'Authorization': config["token"]})
+            req = requests.get(config["api"] + "/" + currency + "/addresses/" + Virtual_Asset_address, headers={'Authorization': config["token"]})
             address = req.json()
             if "tags" in address:
                 tags = address["tags"]
@@ -72,7 +87,7 @@ class GraphSense(DiscoverableTransform):
                 #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
                 if not wallet_tag_label: 
                     # Test address : 15G9wyGRDssFXsfwEm1ihdJs2xabVPDu68
-                    req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
+                    req = requests.get(config["api"] + "/" + currency + "/addresses/" + Virtual_Asset_address + "/entity", headers={'Authorization': config["token"]})
                     address = req.json()
                     if "tags" in address:
                         entity_tags = address["tags"]
