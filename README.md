@@ -2,9 +2,9 @@
 This tranform provided by our Swiss colleagues aims at querying GraphSense data directly in Maltego.  
 We have chosen to restrict this repository to LEAs.  
 The tranform enables simple queries on GraphSense data and tag-packs to obtain transaction graphs in Maltego.  
-Graphsense works for BTC, BCH, LTC and DASH. This transform is only for BTC for now.  
+Graphsense and this transform works for BTC, BCH, LTC, ZEC and ETH.
 
-![Alt text](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
+![A screen copy of the transform result in Maltego](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
 Illustration image from Maltego  
 
 ## Author
@@ -33,7 +33,6 @@ Simply edit the *config.json* file to add your own API Token:
 
 - `token`: *12345*
 - `api`: https://api.graphsense.info
-- `currency`: btc
 
 ## Installation of the required transforms inside Maltego
 
