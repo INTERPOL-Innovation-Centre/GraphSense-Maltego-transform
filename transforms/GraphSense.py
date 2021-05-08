@@ -51,11 +51,13 @@ class GraphSense(DiscoverableTransform):
         req = ""
         tag = ""
         i = 0
+        currency = ""
+        currencies = [""]
         #supported_currencies are "btc", "bch", "ltc", "zec", "eth" (note: a BTC address could also be a bch address)
         Virtual_Asset_match = regex.search(r"\b([13][a-km-zA-HJ-NP-Z1-9]{25,34})|bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})\b", Virtual_Asset_address)
         if Virtual_Asset_match:
            currencies[i] = "btc"
-           i +=
+           i += 1
         Virtual_Asset_match = regex.search(r"\b(bitcoincash\:)?[qp]([0-9a-zA-Z]{41})\b", Virtual_Asset_address)
         if Virtual_Asset_match:
            currencies[i] = "bch"
@@ -72,12 +74,12 @@ class GraphSense(DiscoverableTransform):
                  currencies[i] = "eth"
 
         config = GraphSense.load_config()
-        if "token" not in config or "currency" not in config or "api" not in config:
+        if "token" not in config or "api" not in config:
             return {"error": {"message":"Can not load data from config.json file"}}
         if config["token"] == "YOUR TOKEN":
             return {"error": {"message":"No GraphSense token have been set in the config.json file"}}
             
-        for currency in currencies
+        for currency in currencies:
            try:
                req = requests.get(config["api"] + "/" + currency + "/addresses/" + Virtual_Asset_address, headers={'Authorization': config["token"]})
                address = req.json()
