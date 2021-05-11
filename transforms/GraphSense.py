@@ -23,7 +23,7 @@ class GraphSense(DiscoverableTransform):
                     response.addUIMessage(graphsense_tag["error"]["message"], messageType=UIM_FATAL)
                 if "label" in graphsense_tag:
                     entity = response.addEntity(Phrase, graphsense_tag["label"])
-                    entity.setLinkLabel("To tags [GraphSense]")
+                    entity.setLinkLabel("To tags [GraphSense] (" + graphsense_tag["currency"] + ")")
                     entity.setType("maltego.CryptocurrencyOwner")
                     if "category" in graphsense_tag:
                         entity.addProperty("OwnerType", "loose", graphsense_tag["category"])
@@ -52,13 +52,16 @@ class GraphSense(DiscoverableTransform):
         tag = ""
         i = 0
         currency = ""
-        currencies = [""]
+        currencies = ["",""]
         #supported_currencies are "btc", "bch", "ltc", "zec", "eth" (note: a BTC address could also be a bch address)
         Virtual_Asset_match = regex.search(r"\b([13][a-km-zA-HJ-NP-Z1-9]{25,34})|bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})\b", Virtual_Asset_address)
         if Virtual_Asset_match:
            currencies[i] = "btc"
            i += 1
-        Virtual_Asset_match = regex.search(r"\b(bitcoincash\:)?[qp]([0-9a-zA-Z]{41})\b", Virtual_Asset_address)
+        Virtual_Asset_match = regex.search(r"\b((?:bitcoincash|bchtest):)?([0-9a-zA-Z]{34})\b", Virtual_Asset_address) #for BCH legacy format
+        if Virtual_Asset_match:
+           currencies[i] = "bch"
+        Virtual_Asset_match = regex.search(r"\b((?:bitcoincash|bchtest):)?([0-9a-zA-Z]{34})\b", Virtual_Asset_address) #for BCH CashAddr format
         if Virtual_Asset_match:
            currencies[i] = "bch"
         Virtual_Asset_match = regex.search(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{25,33}\b", Virtual_Asset_address)
@@ -79,7 +82,7 @@ class GraphSense(DiscoverableTransform):
         if config["token"] == "YOUR TOKEN":
             return {"error": {"message":"No GraphSense token have been set in the config.json file"}}
             
-        for currency in currencies:
+        for currency in currencies: #Effectively, a btc address could also be a bch address and we need to search tags for both
            try:
                req = requests.get(config["api"] + "/" + currency + "/addresses/" + Virtual_Asset_address, headers={'Authorization': config["token"]})
                address = req.json()
@@ -91,7 +94,6 @@ class GraphSense(DiscoverableTransform):
                            wallet_tag_label = tag["label"]
                    #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
                    if not wallet_tag_label: 
-                       # Test address : 15G9wyGRDssFXsfwEm1ihdJs2xabVPDu68
                        req = requests.get(config["api"] + "/" + currency + "/addresses/" + Virtual_Asset_address + "/entity", headers={'Authorization': config["token"]})
                        address = req.json()
                        if "tags" in address:
@@ -101,6 +103,7 @@ class GraphSense(DiscoverableTransform):
                                if "source" in entity_tag:
                                    tag = entity_tag
                                    break
+               address["currency"] = currency
            except Exception as e:
                print(e)
                
