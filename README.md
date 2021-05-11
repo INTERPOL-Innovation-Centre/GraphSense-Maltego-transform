@@ -41,7 +41,7 @@ In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego 
 In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.
 
 In the *Input entity type*, choose:
-```Bitcoin Address [maltego.BTCAddress]```
+```Cryptocurrency Address [maltego.CryptocurrencyAddress]```
 
 In the *Command line* box, provide the path to your python3 executable:  
 - ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check one your own machine for the exact path.  
