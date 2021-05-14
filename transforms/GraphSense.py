@@ -4,40 +4,42 @@ from maltego_trx.maltego import UIM_PARTIAL, UIM_FATAL
 from maltego_trx.transform import DiscoverableTransform
 import sys
 import requests
+import re as regex
 import json
 
 
 class GraphSense(DiscoverableTransform):
     """
-    Lookup the name associated with a bitcoin address.
+    Lookup the name associated with a Virtual Asset address.
     """
 
     @classmethod
     def create_entities(cls, request, response):
-        bitcoin_address = request.Value.strip()
-        #print("Bitcoin : " + bitcoin_address)
-        #entity_note = ""
-        #graphsense_tag = ""
-        
+        virtual_asset_address = request.Value.strip()
         try:
-            graphsense_tag = cls.get_details(bitcoin_address)
+            graphsense_tag = cls.get_details(virtual_asset_address)
             if graphsense_tag:
                 if "error" in graphsense_tag:
                     response.addUIMessage(graphsense_tag["error"]["message"], messageType=UIM_FATAL)
-                if "label" in graphsense_tag:
-                    entity = response.addEntity(Phrase, graphsense_tag["label"])
-                    entity.setLinkLabel("To tags [GraphSense]")
-                    entity.setType("maltego.CryptocurrencyOwner")
-                    if "category" in graphsense_tag:
-                        entity.addProperty("OwnerType", "loose", graphsense_tag["category"])
-                    if "source" in graphsense_tag:
-                        entity_note = "Source : " + graphsense_tag["source"] + "\n"
-                    if "abuse" in graphsense_tag:
-                        entity_note = entity_note + "Abuse : " + graphsense_tag["abuse"]
-                    if entity_note:
-                        entity.setNote(entity_note)
+                # Create new entity for each tag we found
+                # If we have the same tag multiple times, Maltego will merge them automatically
+                for tag in graphsense_tag:
+                    if "label" in tag:
+                        entity = response.addEntity(Phrase, tag["label"])
+                        entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
+                        entity.setType("maltego.CryptocurrencyOwner")
+                        if "category" in tag:
+                            entity.addProperty("OwnerType", "loose", tag["category"])
+                        
+                        entity_note = ""
+                        if "source" in tag:
+                            entity_note += "Source : " + tag["source"] + "\n"
+                        if "abuse" in tag:
+                            entity_note += "Abuse : " + tag["abuse"]
+                        if entity_note:
+                            entity.setNote(entity_note)
             else:
-                response.addUIMessage("The Bitcoin address was not found")
+                response.addUIMessage("The Virtual Asset address was not found")
         except Exception as e:
             print(e)
             response.addUIMessage("An error occurred", messageType=UIM_PARTIAL)
@@ -49,41 +51,49 @@ class GraphSense(DiscoverableTransform):
         return config
 
     @staticmethod
-    def get_details(bitcoin_address):
-        wallet_tag_label = ""
-        req = ""
-        tag = ""
-
+    def get_details(virtual_asset_address):
         config = GraphSense.load_config()
-        if "token" not in config or "currency" not in config or "api" not in config:
+        if "token" not in config or "api" not in config:
             return {"error": {"message":"Can not load data from config.json file"}}
         if config["token"] == "YOUR TOKEN":
             return {"error": {"message":"No GraphSense token have been set in the config.json file"}}
 
-        try:
-            req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address, headers={'Authorization': config["token"]})
-            address = req.json()
-            if "tags" in address:
-                tags = address["tags"]
-                if len(tags) > 0:
-                    tag = tags[0]
-                    if "label" in tag:
-                        wallet_tag_label = tag["label"]
-                #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
-                if not wallet_tag_label: 
-                    # Test address : 15G9wyGRDssFXsfwEm1ihdJs2xabVPDu68
-                    req = requests.get(config["api"] + "/" + config["currency"] + "/addresses/" + bitcoin_address + "/entity", headers={'Authorization': config["token"]})
-                    address = req.json()
-                    if "tags" in address:
-                        entity_tags = address["tags"]
-                        for entity_tag in entity_tags:
-                            #we use source rather than label because while a cluster inherits the labels of its addresses, the source is within some of the tagged addresses.
-                            if "source" in entity_tag:
-                                tag = entity_tag
-                                break
-        except Exception as e:
-            print(e)
-        return tag
+        virtual_asset_tags = []
+        currencies = []
+        #supported_currencies are "btc", "bch", "ltc", "zec", "eth" (note: a BTC address could also be a bch address)
+        virtual_asset_match = regex.search(r"\b([13][a-km-zA-HJ-NP-Z1-9]{25,34})|bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})\b", virtual_asset_address)
+        if virtual_asset_match:
+            currencies.append("btc")
+        virtual_asset_match = regex.search(r"\b((?:bitcoincash|bchtest):)?([0-9a-zA-Z]{34})\b", virtual_asset_address)
+        if virtual_asset_match:
+            currencies.append("bch")
+        virtual_asset_match = regex.search(r"\b[LM3][a-km-zA-HJ-NP-Z1-9]{25,33}\b", virtual_asset_address)
+        if virtual_asset_match:
+            currencies.append("ltc")
+        virtual_asset_match = regex.search(r"\b[tz][13][a-km-zA-HJ-NP-Z1-9]{33}\b", virtual_asset_address)
+        if virtual_asset_match:
+            currencies.append("zec")
+        virtual_asset_match = regex.search(r"\b(0x)?[0-9a-fA-F]{40}\b", virtual_asset_address)
+        if virtual_asset_match:
+            currencies.append("eth")
+
+        for currency in currencies:
+            try:
+                req = requests.get(config["api"] + "/" + currency + "/addresses/" + virtual_asset_address, headers={'Authorization': config["token"]})
+                address = req.json()
+                if "tags" in address:
+                    tags = address["tags"]
+                    virtual_asset_tags += tags
+                    #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
+                    if not tags: 
+                        req = requests.get(config["api"] + "/" + currency + "/addresses/" + virtual_asset_address + "/entity", headers={'Authorization': config["token"]})
+                        address = req.json()
+                        if "tags" in address:
+                            virtual_asset_tags += address["tags"]
+            except Exception as e:
+                print(e)
+        #print(virtual_asset_tags)
+        return virtual_asset_tags
 
 if __name__ == "__main__":
     print(GraphSense.get_details(sys.argv[1]))
