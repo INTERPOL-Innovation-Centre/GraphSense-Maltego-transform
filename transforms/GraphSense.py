@@ -79,17 +79,19 @@ class GraphSense(DiscoverableTransform):
 
         for currency in currencies:
             try:
-                req = requests.get(config["api"] + "/" + currency + "/addresses/" + virtual_asset_address, headers={'Authorization': config["token"]})
-                address = req.json()
-                if "tags" in address:
-                    tags = address["tags"]
+                req = requests.get(f"{config['api']}/{currency}/addresses/{virtual_asset_address}/tags", headers={'Authorization': config["token"]})
+                tags = req.json()
+                if tags:
                     virtual_asset_tags += tags
-                    #if this address has no tag, we query Graphsense to find the cluster it belongs to. We use API /entity to get the cluster data
-                    if not tags: 
-                        req = requests.get(config["api"] + "/" + currency + "/addresses/" + virtual_asset_address + "/entity", headers={'Authorization': config["token"]})
-                        address = req.json()
-                        if "tags" in address:
-                            virtual_asset_tags += address["tags"]
+                else:
+                    req = requests.get(f"{config['api']}/{currency}/addresses/{virtual_asset_address}/entity", headers={'Authorization': config["token"]})
+                    virtual_asset_entity = req.json()
+                    if "entity" in virtual_asset_entity:
+                        req = requests.get(f"{config['api']}/{currency}/entities/{virtual_asset_entity['entity']}/tags", headers={'Authorization': config["token"]})
+                        tags = req.json()
+                        if "address_tags" in tags:
+                            virtual_asset_tags += tags["address_tags"]
+                    
             except Exception as e:
                 print(e)
         #print(virtual_asset_tags)
