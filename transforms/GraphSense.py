@@ -84,10 +84,10 @@ class GraphSense(DiscoverableTransform):
                 #print ("Req for ",currency," is = ",req)
                 #print ("Tags for ",currency," is = ",tags)
                 if not ('address_tags' in tags) : #if there is no tag at the address level, we look for tags at the entity level (level=entity)
-                    virtual_asset_tags += tags['address_tags']
+                    #virtual_asset_tags += tags['address_tags']
                     req = requests.get(f"{config['api']}/{currency}/addresses/{virtual_asset_address}/entity", headers={'Authorization': config["token"]})
                     virtual_asset_entity = req.json()
-                    if virtual_asset_entity['entity'] != "":
+                    if 'entity' in virtual_asset_entity:
                         #print("search for tags in entity",config['api'],"/",currency,"/","entities","/",virtual_asset_entity['entity'])
                         req = requests.get(f"{config['api']}/{currency}/entities/{virtual_asset_entity['entity']}/tags", headers={'Authorization': config["token"]}, params={'level':"entity"})
                         tags = req.json()
