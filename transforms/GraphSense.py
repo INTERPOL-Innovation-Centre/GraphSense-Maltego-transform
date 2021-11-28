@@ -81,21 +81,26 @@ class GraphSense(DiscoverableTransform):
             try:
                 req = requests.get(f"{config['api']}/{currency}/addresses/{virtual_asset_address}/tags", headers={'Authorization': config["token"]})
                 tags = req.json()
-                if tags:
-                    virtual_asset_tags += tags
-                else:
+                #print ("Req for ",currency," is = ",req)
+                #print ("Tags for ",currency," is = ",tags)
+                if not ('address_tags' in tags) : #if there is no tag at the address level, we look for tags at the entity level (level=entity)
+                    virtual_asset_tags += tags['address_tags']
                     req = requests.get(f"{config['api']}/{currency}/addresses/{virtual_asset_address}/entity", headers={'Authorization': config["token"]})
                     virtual_asset_entity = req.json()
-                    if "entity" in virtual_asset_entity:
-                        req = requests.get(f"{config['api']}/{currency}/entities/{virtual_asset_entity['entity']}/tags", headers={'Authorization': config["token"]})
+                    if virtual_asset_entity['entity'] != "":
+                        #print("search for tags in entity",config['api'],"/",currency,"/","entities","/",virtual_asset_entity['entity'])
+                        req = requests.get(f"{config['api']}/{currency}/entities/{virtual_asset_entity['entity']}/tags", headers={'Authorization': config["token"]}, params={'level':"entity"})
                         tags = req.json()
-                        if "address_tags" in tags:
-                            virtual_asset_tags += tags["address_tags"]
+                        #print ("Entity Tags for ",currency," is = ",tags)
+                        if 'entity_tags' in tags:
+                            virtual_asset_tags += tags['entity_tags']
+                else:
+                    virtual_asset_tags += tags['address_tags']
                     
             except Exception as e:
                 print(e)
-        #print(virtual_asset_tags)
         return virtual_asset_tags
 
+
 if __name__ == "__main__":
-    print(GraphSense.get_details(sys.argv[1]))
+    GraphSense.get_details(sys.argv[1])
