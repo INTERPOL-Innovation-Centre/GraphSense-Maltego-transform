@@ -1,6 +1,6 @@
 from maltego_trx.entities import Phrase
 
-from maltego_trx.maltego import UIM_PARTIAL, UIM_FATAL
+from maltego_trx.maltego import UIM_PARTIAL, UIM_FATAL, UIM_INFORM, UIM_DEBUG
 from maltego_trx.transform import DiscoverableTransform
 import sys
 import requests
@@ -10,23 +10,26 @@ import json
 
 class GraphSense(DiscoverableTransform):
     """
-    Lookup the name associated with a Virtual Asset address.
+    Lookup the name associated with a Virtual Asset or the entity it belongs to.
     """
 
     @classmethod
     def create_entities(cls, request, response):
         virtual_asset_address = request.Value.strip()
         try:
-            graphsense_tag = cls.get_details(virtual_asset_address)
-            if graphsense_tag:
-                if "error" in graphsense_tag:
-                    response.addUIMessage(graphsense_tag["error"]["message"], messageType=UIM_FATAL)
+            graphsense_response = cls.get_details(virtual_asset_address)
+            if graphsense_response:
+                #if "error" in graphsense_response:
+                    #response.addUIMessage(graphsense_response["error"]["message"], messageType=UIM_FATAL)
                 # Create new entity for each tag we found
                 # If we have the same tag multiple times, Maltego will merge them automatically
-                for tag in graphsense_tag:
+                for tag in graphsense_response:
                     if "label" in tag:
                         entity = response.addEntity(Phrase, tag["label"])
-                        entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
+                        if "entity_tags" in tag:
+                        	entity.setLinkLabel("To tags (entity) [GraphSense] (" + tag["currency"] + ")")
+                        else:
+                        	entity.setLinkLabel("To tags (address) [GraphSense] (" + tag["currency"] + ")")
                         entity.setType("maltego.CryptocurrencyOwner")
                         if "category" in tag:
                             entity.addProperty("OwnerType", "loose", tag["category"])
@@ -37,12 +40,13 @@ class GraphSense(DiscoverableTransform):
                         if "abuse" in tag:
                             entity_note += "Abuse : " + tag["abuse"]
                         if entity_note:
-                            entity.setNote(entity_note)
+                            entity.addDisplayInformation(entity_note) #setNote
+                    entity.reverseLink()
             else:
-                response.addUIMessage("The Virtual Asset address was not found")
+                response.addUIMessage("Done", messageType=UIM_INFORM)
         except Exception as e:
-            print(e)
-            response.addUIMessage("An error occurred", messageType=UIM_PARTIAL)
+            #print(e)
+            response.addUIMessage("No tag found for:"+virtual_asset_address, messageType=UIM_INFORM)
 
     @staticmethod
     def load_config():
@@ -93,12 +97,13 @@ class GraphSense(DiscoverableTransform):
                         tags = req.json()
                         #print ("Entity Tags for ",currency," is = ",tags)
                         if 'entity_tags' in tags:
-                            virtual_asset_tags += tags['entity_tags']
+                            virtual_asset_tags += tags['entity_tags']+UIMessage("Done", messageType=UIM_INFORM)
                 else:
                     virtual_asset_tags += tags['address_tags']
                     
             except Exception as e:
-                print(e)
+                print("")
+                virtual_asset_tags.addUIMessage("unable to query GraphSense for currency:"+currency, messageType=UIM_INFORM)
         return virtual_asset_tags
 
 
