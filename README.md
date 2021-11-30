@@ -38,19 +38,32 @@ Simply edit the *config.json* file to add your own API Token:
 
 In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego Transform Hub to work with Bitcoin Address Entities.
 
-In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.
+> *Transforms Tab*  
 
-In the *Input entity type*, choose:
+or in 
+> *Transforms manager*  
+
+Click add a *New Local Transform*.
+
+> *Input entity type*  
+
+Choose:  
 ```Cryptocurrency Address [maltego.CryptocurrencyAddress]```
 
-In the *Command line* box, provide the path to your python3 executable:  
-- ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check one your own machine for the exact path.  
+> *Command line*  
+
+Provide the path to your python3 executable:  
+- ```C:\Users\Unicorn\AppData\Local\Programs\Python\PythonXX\python.exe``` by default for Windows 10. Check one your own machine for the exact path (XX is the python version).  
 - ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*" below if you experience problems).
 
-In the *Command parameters* box, type:  
+> *Command parameters*  
+
+Type:  
 ```project.py local graphsense```
 
-In the *Working directory* box, insert the full path to the folder where you have cloned this project.
+> *Working directory*  
+
+Insert the full path to the folder where you have cloned this project.
 
 -- Done ! --
 
