@@ -1,28 +1,32 @@
 # GraphSense Maltego Transform
-This tranform provided by our Swiss colleagues aims at querying GraphSense data directly in Maltego.  
-We have chosen to restrict this repository to LEAs.  
-The tranform enables simple queries on GraphSense data and tag-packs to obtain transaction graphs in Maltego.  
-Graphsense and this transform works for BTC, BCH, LTC, ZEC and ETH.
+This tranform set for GraphSense is from an original idea of our Swiss colleagues and aims at querying GraphSense data directly in Maltego.  
+We have chosen to restrict this repository to LEAs only.  
+The tranforms enable simple queries on GraphSense data and tag-packs to obtain transaction graphs and attribution tags in Maltego.  
+Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH.
 
 ![A screen copy of the transform result in Maltego](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
-Illustration image from Maltego  
+Illustration image from Maltego
 
-## Author
-Vincent Graber
-[github/grarbervi](https://github.com/grabervi)
+## Authors
+Vincent Graber  
+[github/grarbervi](https://github.com/grabervi)  
+Vincent Danjean  
+[github/VinceICPO](https://github.com/vinceicpo)
+
 ## Disclaimer
-Please do not share outside LEA circles, this is [TLP:AMBER]
+Please do not share outside LEA circles, this is [TLP:AMBER]  
+This set of tools is provided as-is with no guaranty of accuracy.
 
-## Prerequisit
+## Prerequisite
 
 Works with Python3
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the required python librairies.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the below required python librairies.
 
 Microsoft Visual C++ 14.0 is required to install [maltego-trx](https://github.com/paterva/maltego-trx)
 
 ```bash
-pip install maltego-trx
+pip install maltego-trx  
 pip install requests
 ```
 
@@ -38,19 +42,23 @@ Simply edit the *config.json* file to add your own API Token:
 
 In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego Transform Hub to work with Bitcoin Address Entities.
 
-In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.
+1/ In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.
 
-In the *Input entity type*, choose:
+2/ In the *Input entity type*, choose:
 ```Cryptocurrency Address [maltego.CryptocurrencyAddress]```
 
-In the *Command line* box, provide the path to your python3 executable:  
-- ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check one your own machine for the exact path.  
+3/ In the *Command line* box, provide the path to your python3 executable:  
+- ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check on your own machine for the exact path.  
 - ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*" below if you experience problems).
 
-In the *Command parameters* box, type:  
-```project.py local graphsense```
+4/ In the *Command parameters* box, type:  
+```project.py local totags```
 
-In the *Working directory* box, insert the full path to the folder where you have cloned this project.
+5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.
+
+You need to repeat this from 1/ above for each of transforms contained in this set:
+- ToDetails
+- ToCluster
 
 -- Done ! --
 

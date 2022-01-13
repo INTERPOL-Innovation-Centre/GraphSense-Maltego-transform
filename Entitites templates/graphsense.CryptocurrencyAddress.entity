@@ -1,0 +1,29 @@
+<MaltegoEntity id="maltego.CryptocurrencyAddress" displayName="Cryptocurrency Address" displayNamePlural="Cryptocurrency Addresses" description="Generic Cryptocurrency Address" category="Cryptocurrency" smallIconResource="QRCode" largeIconResource="QRCode" allowedRoot="false" conversionOrder="2147483647" visible="true">
+   <Properties value="properties.cryptocurrencyaddress" displayValue="properties.cryptocurrencyaddress">
+      <Groups/>
+      <Fields>
+         <Field name="properties.cryptocurrencyaddress" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Cryptocurrency Address">
+            <DefaultValue> </DefaultValue>
+            <SampleValue>1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX</SampleValue>
+         </Field>
+         <Field name="num_transactions" type="int" nullable="true" hidden="false" readonly="false" description="" displayName="Number of  Transactions">
+            <SampleValue>0</SampleValue>
+         </Field>
+         <Field name="total_received" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Received">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="total_sent" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Sent">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="total_throughput" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Throughput">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="final_balance" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Final Balance">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="ClusterID" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Cluster ID">
+            <SampleValue>123456</SampleValue>
+         </Field>
+      </Fields>
+   </Properties>
+</MaltegoEntity>

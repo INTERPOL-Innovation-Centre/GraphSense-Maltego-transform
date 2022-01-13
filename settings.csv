@@ -1,0 +1,3 @@
+Name,Type,Display,DefaultValue,Optional,Popup
+global#api_key,string,API Key,,False,No
+global#api_url,url,API Url,,False,No

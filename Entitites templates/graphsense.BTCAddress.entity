@@ -1,0 +1,41 @@
+<MaltegoEntity id="maltego.BTCAddress" displayName="Bitcoin Address" displayNamePlural="Bitcoin Addresses" description="Bitcoin Address" category="Cryptocurrency" smallIconResource="Cryptocurrency/BtcAddress" largeIconResource="Cryptocurrency/BtcAddress" allowedRoot="true" conversionOrder="1000" visible="true">
+   <BaseEntities>
+      <BaseEntity>maltego.CryptocurrencyAddress</BaseEntity>
+   </BaseEntities>
+   <Converter>
+      <Value><![CDATA[\b([13][a-km-zA-HJ-NP-Z1-9]{25,34})|bc(0([ac-hj-np-z02-9]{39}|[ac-hj-np-z02-9]{59})|1[ac-hj-np-z02-9]{8,87})\b]></Value>
+      <RegexGroups/>
+   </Converter>
+   <Properties image="OwnerTypeIcon" value="properties.cryptocurrencyaddress" displayValue="properties.cryptocurrencyaddress">
+      <Groups/>
+      <Fields>
+         <Field name="OwnerTypeIcon" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Owner Type Icon">
+            <SampleValue></SampleValue>
+         </Field>
+         <Field name="OwnerType" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Owner Type">
+            <SampleValue></SampleValue>
+         </Field>
+         <Field name="num_transactions" type="int" nullable="true" hidden="false" readonly="false" description="" displayName="Number of  Transactions">
+            <SampleValue>0</SampleValue>
+         </Field>
+         <Field name="total_received" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Received">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="total_sent" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Sent">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="total_throughput" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Total Throughput">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="final_balance" type="float" nullable="true" hidden="false" readonly="false" description="" displayName="Final Balance">
+            <SampleValue>0.0</SampleValue>
+         </Field>
+         <Field name="properties.cryptocurrencyaddress" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Cryptocurrency Address">
+            <SampleValue>1F1tAaz5x1HUXrCNLbtMDqcw6o5GNn4xqX</SampleValue>
+         </Field>
+         <Field name="ClusterID" type="string" nullable="true" hidden="false" readonly="false" description="" displayName="Cluster ID">
+            <SampleValue></SampleValue>
+         </Field>
+      </Fields>
+   </Properties>
+</MaltegoEntity>
