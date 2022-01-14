@@ -53,16 +53,20 @@ In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego 
 
 4/ In the *Command parameters* box, type:  
 ```project.py local totags```
+"totags" is one of the transforms available. Please see 6/ below. 
 
 5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.
 
-You need to repeat this from 1/ above for each of transforms contained in this set:
+6/ You need to repeat 1/ to 5/ above for each of the transforms contained in this set:
 - ToDetails
 - ToCluster
+- ToKnownEntities (to be added, currently under dev.)
+
+You may also repeat 1/ to 5/ above with *Input entity type* set to ```Cryptocurrency Wallet [maltego.CryptocurrencyWallet]``` and *Command parameters* set to ```project.py local todetails``` and also "totags" so you may query Graphsense for details and tags from a wallet entity.
 
 -- Done ! --
 
-You can now use this transform in a Maltego Graph starting from a BTC address.
+You can now use this transform in a Maltego Graph starting from a supported cryptocurrency address or cluster.
 
 ## Contribute
 You may help us develop this tool.
