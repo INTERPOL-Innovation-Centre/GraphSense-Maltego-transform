@@ -1,10 +1,14 @@
+# extensions.py
 from maltego_trx.decorator_registry import TransformRegistry
 
+from settings import api_key_setting
+from settings import api_url_setting
+
 registry = TransformRegistry(
-        owner="ACME Corporation",
-        author="John Doe <johndoe@acme.com>",
-        host_url="https://transforms.acme.com",
-        seed_ids=["demo"]
+        owner="INTERPOL Innovation Centre",
+        author="Vincent Danjean <v.danjean@interpol.int>",
+        host_url="http://0.0.0.0:8080",
+        seed_ids=["interpol.graphsense"]
 )
 
 # The rest of these attributes are optional
@@ -12,12 +16,7 @@ registry = TransformRegistry(
 # metadata
 registry.version = "0.1"
 
-# global settings
-# from maltego_trx.template_dir.settings import api_key_setting
-# registry.global_settings = [api_key_setting]
-
 # transform suffix to indicate datasource
-# registry.display_name_suffix = " [ACME]"
+registry.display_name_suffix = " [GRAPHSENSE]"
 
-# reference OAuth settings
-# registry.oauth_settings_id = ['github-oauth']
+registry.global_settings = [api_key_setting, api_url_setting]

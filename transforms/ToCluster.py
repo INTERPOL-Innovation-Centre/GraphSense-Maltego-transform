@@ -1,4 +1,4 @@
-from maltego_trx.maltego import MaltegoMsg, MaltegoTransform
+from maltego_trx.maltego import MaltegoMsg, MaltegoTransform, UIM_FATAL
 from maltego_trx.transform import DiscoverableTransform
 
 from extensions import registry
@@ -18,7 +18,7 @@ class ToCluster(DiscoverableTransform):
 	"""
 	
 	@classmethod
-	def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
+	def create_entities(cls, request: MaltegoMsg, responseMaltego: MaltegoTransform):
 		
 		query_type = "cluster"
 
@@ -28,17 +28,27 @@ class ToCluster(DiscoverableTransform):
 		else:
 			address = entity_details['address']
 		if address[:2] == "bc": #beech32 BTC addresses include "bc" at the begining, we want to remove that.
-			address = address[2:]
+			#address = address[2:] Not needed because Graphsense can handle bcxxx addresses.
 			currencies = ["btc"] #we know this is BTC, no need to check for BCH or other currencies.
-		else :
-			currencies = get_currency(address)
-			
+		#else:
+		currencies = get_currency(address)
+
 		for currency in currencies:
 			results = get_address_details(currency,address)
-			entity = create_entity_with_details(results,currency,query_type, response)
-			if entity != "" :
-				#print(entity)
-				return entity
+			if results[1] :
+				if (results[1].find("504")):# the Graphsense server is missing a </hr> in its HTTP504 response page which bugs Maltego hence the below. handling...
+					responseMaltego.addUIMessage("\nThere was a Graphsense server 504 Bad Gateway response running the query " + query_type + " for " + currency + "\n",UIM_FATAL)
+				else:
+					responseMaltego.addUIMessage(results[1],UIM_FATAL)
+				return
+			else:
+				responses = create_entity_with_details(results[0],currency,query_type, responseMaltego)
+				if responses[1]:
+					if (results[1].find("504")):
+						responseMaltego.addUIMessage("\nThere was a Graphsense server 504 Bad Gateway response while creating the results:\n" + " for " + currency + "\n",UIM_FATAL)
+					else:
+						responseMaltego.addUIMessage(results[1],UIM_FATAL)
+		return
 
 if __name__ == "__main__":
-    create_entities(sys.argv[1])
+	create_entities(sys.argv[1])
