@@ -45,9 +45,8 @@ class ToTags(DiscoverableTransform):
 				results = get_address_details(currency,address)
 			else:
 				results = get_entity_details(currency,address)
-			
 			if results[1] :
-				if (results[1].find("504")):# the Graphsense server is missing a </hr> in its HTTP504 response page which bugs Maltego hence the below. handling...
+				if "504 Bad Gateway" in results[1]:# the Graphsense server is missing a </hr> in its HTTP504 response page which bugs Maltego hence the below. handling...
 					responseMaltego.addUIMessage("\nThere was a Graphsense server 504 Bad Gateway response running the query " + query_type + " for " + currency + "\n",UIM_FATAL)
 				else:
 					responseMaltego.addUIMessage(results[1],UIM_FATAL)
@@ -55,7 +54,7 @@ class ToTags(DiscoverableTransform):
 			else:
 				responses = create_entity_with_details(results[0],currency,query_type, responseMaltego)
 				if responses[1]:
-					if (results[1].find("504")):
+					if "504 Bad Gateway" in responses[1]:
 						responseMaltego.addUIMessage("\nThere was a Graphsense server 504 Bad Gateway response while creating the results:\n" + " for " + currency + "\n",UIM_FATAL)
 					else:
 						responseMaltego.addUIMessage(results[1],UIM_FATAL)
