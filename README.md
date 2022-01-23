@@ -92,7 +92,7 @@ You can now use this set of transforms in a Maltego Graph starting from a suppor
 You may do this on any cryptocurrency address but this set of tranforms works for BTC, BCH, LTC and ETH.  
 
 As with any other Maltego Transform, all that is needed is a right-click on the entity and choosing the transform you want to run.  
-![A screen copy of the transform choices in Maltego](Choose%20a%20ttransform.png?raw=true "Choose a transform")  
+![A screen copy of the transform choices in Maltego](Choose%20a%20transform.png?raw=true "Choose a transform")  
 Illustration image from Maltego  
 
 ![A screen copy of an item (a cluster) in Maltego](Cluster.png?raw=true "A cluster with known attribution tags")  
