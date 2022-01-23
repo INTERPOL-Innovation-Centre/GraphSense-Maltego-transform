@@ -5,17 +5,18 @@ The tranforms enable simple queries on GraphSense data and tag-packs to obtain t
 Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH.  
 
 ![A screen copy of the transform result in Maltego](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
-Illustration image from Maltego  
 
-## Authors
+## Authors and attribution
 Vincent Graber  
 [github/grarbervi](https://github.com/grabervi)  
 Vincent Danjean  
 [github/VinceICPO](https://github.com/vinceicpo)  
+Images on this page are our own, and made from Maltego 4.2.19 Enterprise.  
 
 ## Disclaimer
 Please do not share outside LEA circles, this is [TLP:AMBER]  
 This set of tools is provided as-is with no guaranty of accuracy.  
+Check the facts before building your case on the finding from this tool.
 
 ## Prerequisite
 
@@ -52,6 +53,10 @@ In the *Author* box, enter:
 ```Interpol Innovation Centre```
 In the *Input entity type* box, choose:  
 ```Unknown [maltego.Unknown]```  
+
+![First page of the local transform configuration in Maltego](ConfigureDetails1.png?raw=true "First page of the local transform configuration in Maltego]")
+If all is good, your configuration should look similar to this.  
+
 Click on *Next>*  
 
 3/ In the *Command line* box, provide the path to your python3 executable:  
@@ -63,6 +68,10 @@ Click on *Next>*
 "totags" is one of the transforms available. Please see 6/ below.  
 
 5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.  
+![Second page of the local transform configuration in Maltego](ConfigureDetails2.png?raw=true "Second page of the local transform configuration in Maltego]")
+If all is good, your configuration should look similar to this.  
+
+Click on *Finish*  
 
 6/ You need to repeat 1/ to 5/ above for each of the transforms contained in this set:
 - To Details (project.py local todetails)
@@ -72,20 +81,36 @@ Click on *Next>*
 For this, go to *Entities* tab, click on *Import Entities*  
 Browse to and select the "Graphsense Entities.mtz" file. Click *Next>*  
 Tick both the *Entities* and the *Icons* boxes to import everything. Click *Next>*  
-Click *Finish*
+
+Click on *Finish*
 
 -- Done ! --
 
-You can now use these transforms in a Maltego Graph starting from any supported cryptocurrency address or cluster (BTC, BCH, LTC or ZEC).  
-## Hints
-Please note that when running on an unknown cryptocurrency address (one that is not BTC), our transforms will use find what cryptocurrency this address can be and will create the corresponding entity.  
-I.e.: if an address is both a BTC and BCH address, our transform will create both entities.  
+## Use
 
-When querying the details, the transfrom will add many properties to the entity, including the first and last transaction dates and a *businessman icon* in the top left corner to indicate that there are known GraphSense tags on this entity.  
+You can now use this set of transforms in a Maltego Graph starting from a supported cryptocurrency address or cluster.  
+You may do this on any cryptocurrency address but this set of tranforms works for BTC, BCH, LTC and ETH.  
 
-There is at least *one limitation* to the current way to display the attribution Tags and the addresses linked:  
-Only one tag is shown in Maltego but this tag can actually belong to several different addresses in one cluster or even in several currencies. The list of addresses is not shown yet only the last address queried is shown.  
-Make sure you understand this limitation prior to drawing conclusions.  
+As with any other Maltego Transform, all that is needed is a right-click on the entity and choosing the transform you want to run.  
+![A screen copy of the transform choices in Maltego](Choose%20a%20ttransform.png?raw=true "Choose a transform")  
+Illustration image from Maltego  
+
+![A screen copy of an item (a cluster) in Maltego](Cluster.png?raw=true "A cluster with known attribution tags")  
+Illustration image from Maltego  
+The illustration above is a cluster in the Graphsense meaning. It is an item that ties together several cryptocurrency adresses that the GraphSense algorithms and euristics have found to be controlled by one same entity.  
+If the cluster tags is accompanied by a businessman on the top left corner -like in the illustration above-, thi implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
+In this case, use the "to tags" transform to display the list of associated tags and their details.
+
+A normal way of using this to follow the money trail would be:
+- Start by creating the entity you know of: drag and drop a cryptocurrency address from the entity palette.  
+- Alternatively you may use the import function and use a csv file to create a batch of entities.  
+- Right-click on the entity(ies) and run "to details" tranform. This will document the properties with all dates, amounts, etc.   
+- if the entity now has a businessman overlay, right-click on the entity(ies) and run "to tags" transform to find out what the attribution tags is.  
+To go further:  
+- Right-click on the entity(ies) and run "to inbound (and/or outbound) transactions" from the Blockchain.info tranforms.  
+- Right-click on the entity(ies) and run "to cluster" tranform. Again here if the resulting cluster shows a businessman overlay, run the "to tags" transform.  
+- if nothing is found, run the "to Source address" or "to destination address" from Blockchain.info. Repeat the above process on these new addresses.  
+
 
 ## Contribute
 You may help us develop this tool.  
