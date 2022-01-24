@@ -48,7 +48,7 @@ def get_currency(virtual_asset_address):
 		currency.append("eth")
 	if not currency:
 		return [], "Currency not supported"
-	return currency, ""
+	return currency, []
 
 def get_currency_from_entity_details(entity_details):
 	currency= []
@@ -65,11 +65,10 @@ def get_currency_from_entity_details(entity_details):
 	if not currency:
 		currency = get_currency(entity_details['properties.cryptocurrencyaddress'])
 		if currency[1]:
-			error = "Currency not supported for: " + str(entity_details)
+			error = ["Currency not supported for: " + str(entity_details)]
 			return [], error
-		else:
-			currency = currency[0]
-	return currency[0], ""
+	currency = currency[0]
+	return currency, ""
 
 def get_address_details(currency, address):
 	error= ""

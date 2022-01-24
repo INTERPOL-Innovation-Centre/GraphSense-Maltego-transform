@@ -29,13 +29,16 @@ class ToDetails(DiscoverableTransform):
 		#if 'properties.cryptocurrencyaddress' in entity_details: #Else, we are looking for tags on a specific address
 			#address = entity_details['properties.cryptocurrencyaddress']
 		else:
-			currencies = get_currency_from_entity_details(request.Properties) # We use regex to check what Cryptocurrency this is. This could return BTC and BCH since they are similar.
-			if currencies[1]:
-				responseMaltego.addUIMessage("\n" + currencies[1] + "\n",UIM_INFORM)
-				return
-			currencies = currencies[:1]
+			if "currency" in entity_details: #if a currency is already specified in the details, we use that currency and only that one. Else, we try to figure out what currency this could be and check all.
+				currencies = [entity_details['currency']]
+			else:
+				currencies = get_currency_from_entity_details(request.Properties) # We use regex to check what Cryptocurrency this is. This could return BTC and BCH since they are similar.
+				if currencies[1]:
+					responseMaltego.addUIMessage("\n" + currencies[1] + "\n",UIM_INFORM)
+					return
+				currencies = currencies[0]
 			address = entity_details['properties.cryptocurrencyaddress']
-		#print(currencies)
+
 		for currency in currencies:	
 			if 'cryptocurrency.wallet.name' in entity_details:
 				results = get_entity_details(currency,address)
@@ -48,7 +51,7 @@ class ToDetails(DiscoverableTransform):
 					responseMaltego.addUIMessage("\nNothing found in " + currency + " for : " + str(address) + "\n",UIM_INFORM)
 				else:
 					responseMaltego.addUIMessage(results[1],UIM_INFORM)
-				return
+				#return
 			else:
 				responses = create_entity_with_details(results[0],currency,query_type, responseMaltego)
 				if responses[1]:

@@ -93,12 +93,11 @@ You may do this on any cryptocurrency address but this set of tranforms works fo
 
 As with any other Maltego Transform, all that is needed is a right-click on the entity and choosing the transform you want to run.  
 ![A screen copy of the transform choices in Maltego](Choose%20a%20transform.png?raw=true "Choose a transform")  
-Illustration image from Maltego  
 
 ![A screen copy of an item (a cluster) in Maltego](Cluster.png?raw=true "A cluster with known attribution tags")  
-Illustration image from Maltego  
+
 The illustration above is a cluster in the Graphsense meaning. It is an item that ties together several cryptocurrency adresses that the GraphSense algorithms and euristics have found to be controlled by one same entity.  
-If the cluster tags is accompanied by a businessman on the top left corner -like in the illustration above-, thi implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
+If the cluster tags is accompanied by a businessman on the top left corner overlay,  -like in the illustration above-, this implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
 In this case, use the "to tags" transform to display the list of associated tags and their details.
 
 A normal way of using this to follow the money trail would be:
