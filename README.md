@@ -5,10 +5,7 @@ The tranforms enable simple queries on GraphSense data and tag-packs to obtain t
 |Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH|  
 |:---:|
 |<img src="images/bitcoin.png" height="80"><img src="images/bitcoincash.png" height="80"><img src="images/litecoin.png" height="80"><img src="images/zcash.png" height="80"><img src="images/ethereum.png" height="80">|  
-
-
-
-![A screen copy of the transform result in Maltego](images/Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
+|![A screen copy of the transform result in Maltego](images/Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")|  
 
 ## Authors and attribution
 Vincent Graber  
