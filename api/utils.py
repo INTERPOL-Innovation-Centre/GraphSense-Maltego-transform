@@ -17,12 +17,12 @@ def open_config():
 	try:
 		with open("config.json") as json_data_file:
 			config = json.load(json_data_file)
-		if "token" not in config or "api" not in config:
+		if "api_key" not in config or "api_url" not in config:
 			print("Error message: Cannot load data from config.json file")
 		else:
 			configuration = Configuration(
-			host = config["api"],
-			api_key = {'api_key': config["token"]}
+			host = config["api_url"],
+			api_key = {'api_key': config["api_key"]}
 			)
 	except Exception as e:
 		error = "Could not read config.json. Error: " + str(e)

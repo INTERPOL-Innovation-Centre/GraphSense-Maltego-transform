@@ -1,4 +1,4 @@
 {
-	"api": "https://api.graphsense.info", 
-	"token": "gsPvhprEZdF/hUiAW04DCsr6s0RUoGW1"
+	"api_url": "API_URL", 
+	"api_key": "YOUR_API_KEY"
 }
