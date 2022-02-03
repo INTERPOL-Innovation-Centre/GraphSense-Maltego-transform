@@ -2,9 +2,10 @@
 This tranform set for GraphSense is from an original idea of our Swiss colleagues and aims at querying GraphSense data directly in Maltego.  
 We have chosen to restrict this repository to LEAs only.  
 The tranforms enable simple queries on GraphSense data and tag-packs to obtain transaction graphs and attribution tags in Maltego.  
-Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH.  
-
-![A screen copy of the transform result in Maltego](Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")  
+|Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH|  
+|:---:|
+|<img src="images/bitcoin.png" height="80"><img src="images/bitcoincash.png" height="80"><img src="images/litecoin.png" height="80"><img src="images/zcash.png" height="80"><img src="images/ethereum.png" height="80">|  
+|![A screen copy of the transform result in Maltego](images/Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")|  
 
 ## Authors and attribution
 Vincent Graber  
@@ -54,21 +55,21 @@ In the *Author* box, enter:
 In the *Input entity type* box, choose:  
 ```Unknown [maltego.Unknown]```  
 
-![First page of the local transform configuration in Maltego](ConfigureDetails1.png?raw=true "First page of the local transform configuration in Maltego]")
+<img src="images/ConfigureDetails1.png" width="70%">  
 If all is good, your configuration should look similar to this.  
 
 Click on *Next>*  
 
 3/ In the *Command line* box, provide the path to your python3 executable:  
 - ```C:\Users\Unicorn\AppData\Local\Programs\Python\Python37\python.exe``` by default for Windows 10. Check on your own machine for the exact path.  
-- ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*" below if you experience problems).  
+- ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*"[^1] below if you experience problems).  
 
 4/ In the *Command parameters* box, type:  
 ```project.py local totags```
 "totags" is one of the transforms available. Please see 6/ below.  
 
 5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.  
-![Second page of the local transform configuration in Maltego](ConfigureDetails2.png?raw=true "Second page of the local transform configuration in Maltego]")
+<img src="images/ConfigureDetails2.png" width="70%">  
 If all is good, your configuration should look similar to this.  
 
 Click on *Finish*  
@@ -89,12 +90,11 @@ Click on *Finish*
 ## Use
 
 You can now use this set of transforms in a Maltego Graph starting from a supported cryptocurrency address or cluster.  
-You may do this on any cryptocurrency address but this set of tranforms works for BTC, BCH, LTC and ETH.  
+You may do this on any cryptocurrency address but this set of tranforms works for BTC, BCH, LTC, ZEC and ETH.  
 
 As with any other Maltego Transform, all that is needed is a right-click on the entity and choosing the transform you want to run.  
-![A screen copy of the transform choices in Maltego](Choose%20a%20transform.png?raw=true "Choose a transform")  
-
-![A screen copy of an item (a cluster) in Maltego](Cluster.png?raw=true "A cluster with known attribution tags")  
+<img src="images/Choose%20a%20transform.png" width="300px">  
+<img src="images/Cluster.png" height="100px">  
 
 The illustration above is a cluster in the Graphsense meaning. It is an item that ties together several cryptocurrency adresses that the GraphSense algorithms and euristics have found to be controlled by one same entity.  
 If the cluster tags is accompanied by a businessman on the top left corner overlay,  -like in the illustration above-, this implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
@@ -120,10 +120,9 @@ Feel free to open an [Issue or improvement request](https://github.com/INTERPOL-
 The developement is done in the [Dev branch](https://github.com/INTERPOL-Innovation-Centre/GraphSense-Maltego-transform/tree/Dev).  
 
 
-##
-*Troubleshooting for Mac*  
-On Mac OS X it is important to check that the above pip is installing the modules in the same python3 as Maltego expects.  
 
+[^1]: *Troubleshooting for Mac*  
+On Mac OS X it is important to check that the above pip is installing the modules in the same python3 as Maltego expects.  
 To check which Python Maltego is effectively using, set the tranform with the `Command line` box as `which` and the `Command parameters` box as `python3`.  
 Run the transform once and look for the result in debug output box.  
 This will give you the path to the python version used by the Maltego app.  
