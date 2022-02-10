@@ -41,22 +41,25 @@ Simply edit the *config.json* file to add your own API Token:
 
 ## Installation of the required transforms inside Maltego
 
-In Maltego, install the *Blockchain.info (Bitcoin) by Paterva* from the Maltego Transform Hub to work with Bitcoin Address Entities.  
+Clone this repository to a local folder on your machine.  
+
+In Maltego, from the transform hub, install:
+- the *Blockchain.info (Bitcoin) by Paterva* to work with Bitcoin Address Entities. 
+- the *Tatum Blockchain Explorer by Maltego Technologies*, it adds support for other cryptocurrencies [(list here)](https://docs.tatum.io/supported-blockchains). The Tatum transforms run out of the box but you may consider getting your own free API key for more queries a month by registering at: [https://dashboard.tatum.io](https://dashboard.tatum.io)  
 
 1/ In the *Transforms Tab* or in *Transforms manager*, add a *New Local Transform*.  
 
 2/ Fill-in the required fields:  
-In the *Display Name* box, enter:
-```To tags [Graphsense]```  
+In the *Display Name* box, enter:  
+```To details [Graphsense]```  
 In the *Transform ID* box, enter:  
-```graphsense.ToTags```, no space, no special characters here.  
-In the *Author* box, enter:  
-```Interpol Innovation Centre```
+```graphsense.ToDetails```, no space, no special characters here.  
+In the *Author* box, enter whatever you like.  
 In the *Input entity type* box, choose:  
-```Unknown [maltego.Unknown]```  
+```Unknown [maltego.Unknown]```, as you type, Maltego will propose the corresponding entries.
 
 <img src="images/ConfigureDetails1.png" width="70%">  
-If all is good, your configuration should look similar to this.  
+If all is good, your configuration should look similar to the above.  
 
 Click on *Next>*  
 
@@ -65,17 +68,17 @@ Click on *Next>*
 - ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*"[^1] below if you experience problems).  
 
 4/ In the *Command parameters* box, type:  
-```project.py local totags```
+```project.py local todetails```
 "totags" is one of the transforms available. Please see 6/ below.  
 
 5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.  
 <img src="images/ConfigureDetails2.png" width="70%">  
-If all is good, your configuration should look similar to this.  
+If all is good, your configuration should look similar to the above.  
 
 Click on *Finish*  
 
 6/ You need to repeat 1/ to 5/ above for each of the transforms contained in this set:
-- To Details (project.py local todetails)
+- To Tags (project.py local totags)
 - To Cluster (project.py local tocluster)
 
 7/ Import the GraphSense Entities:  
@@ -98,7 +101,9 @@ As with any other Maltego Transform, all that is needed is a right-click on the 
 
 The illustration above is a cluster in the Graphsense meaning. It is an item that ties together several cryptocurrency adresses that the GraphSense algorithms and euristics have found to be controlled by one same entity.  
 If the cluster tags is accompanied by a businessman on the top left corner overlay,  -like in the illustration above-, this implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
-In this case, use the "to tags" transform to display the list of associated tags and their details.
+In a cluster shows a businessman, use the "to tags" transform to display the associated tag(s).  
+The number on the left, below the businessman represents the number of cryptocurrency addresses belonging to that cluster.  
+
 
 A normal way of using this to follow the money trail would be:
 - Start by creating the entity you know of: drag and drop a cryptocurrency address from the entity palette.  
@@ -124,7 +129,7 @@ The developement is done in the [Dev branch](https://github.com/INTERPOL-Innovat
 [^1]: *Troubleshooting for Mac*  
 On Mac OS X it is important to check that the above pip is installing the modules in the same python3 as Maltego expects.  
 To check which Python Maltego is effectively using, set the tranform with the `Command line` box as `which` and the `Command parameters` box as `python3`.  
-Run the transform once and look for the result in debug output box.  
+Run the transform once and look for the result in the debug output box.  
 This will give you the path to the python version used by the Maltego app.  
 It needs to be the same path as the pip used above (check by runing ```pip -V``` in terminal).  
-If it isn't, try with pip3 instead of pip. You may need to reinstall the Prerequisite above once this pip vs python path is fixed.
+If it isn't, try with pip3 instead of pip. You may need to reinstall the Prerequisites above once this pip and python path is fixed.
