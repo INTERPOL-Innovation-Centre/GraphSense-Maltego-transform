@@ -167,6 +167,9 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		
 
 	if query_type == "cluster":
+		icon_name = set_type[8:]
+		if (icon_name == "ZECAddress"):
+			icon_name = "zcash_icon_fullcolor"
 		set_type = "maltego.CryptocurrencyWallet"
 		cluster_ID = json_result['entity'] #the Cluster ID is known as "entity" in GraphSense API json result
 		
@@ -176,6 +179,7 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 			return "", error
 		else:
 			json_result = json_result[0]
+		
 
 		balance_value = json_result['balance']['value']
 		total_received_value = json_result['total_received']['value']
@@ -189,6 +193,7 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		first_tx_datetime = datetime.fromtimestamp(json_result['first_tx']['timestamp'])
 			
 		entity = response.addEntity(set_type, cluster_ID)
+		entity.setLinkLabel(str("To Cluster [Graphense] " + "(" + currency) + ")")
 		entity.addProperty("cryptocurrency.wallet.name", value=cluster_ID)
 		entity.addProperty("cluster_ID", "Cluster ID", value=cluster_ID)
 		entity.addProperty("currency","Currency", "strict", value=currency) # we want this to be strict matching so that Maltego doesn't merge two clusters that are different (one is btc and the other bch for instance).
@@ -202,6 +207,9 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		entity.addProperty("num_out_transactions","Number of outgoing transactions", value=json_result['no_outgoing_txs'])
 		entity.addProperty("Last_tx", "Last transaction (UTC)", value=last_tx_datetime)
 		entity.addProperty("First_tx", "First transaction (UTC)", value=first_tx_datetime)
+		entity.addProperty("Number_addresses", "Number of Addresses", value=json_result['no_addresses'])
+		entity.addOverlay(json_result['no_addresses'], OverlayPosition.SOUTH_WEST, OverlayType.TEXT)
+		entity.addOverlay(icon_name, OverlayPosition.WEST, OverlayType.IMAGE)
 		entity.addOverlay('', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)# first we reset the overlay
 		if json_result['tags']!= []: # or ('address_tags' in json_result) or ('entity_tags' in json_result):
 			if json_result['tags']['address_tags']!=[] or json_result['tags']['entity_tags']!=[]:
