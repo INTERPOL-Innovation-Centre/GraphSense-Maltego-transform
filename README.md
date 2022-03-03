@@ -1,6 +1,5 @@
 # GraphSense Maltego Transform
 This tranform set for GraphSense is from an original idea of our Swiss colleagues and aims at querying GraphSense data directly in Maltego.  
-We have chosen to restrict this repository to LEAs only.  
 The tranforms enable simple queries on GraphSense data and tag-packs to obtain transaction graphs and attribution tags in Maltego.  
 |Graphsense and this transform set work for BTC, BCH, LTC, ZEC and ETH|  
 |:---:|
@@ -15,7 +14,6 @@ Vincent Danjean
 Images on this page are our own, and made from Maltego 4.2.19 Enterprise.  
 
 ## Disclaimer
-Please do not share outside LEA circles, this is [TLP:AMBER]  
 This set of tools is provided as-is with no guaranty of accuracy.  
 Check the facts before building your case on the finding from this tool.
 
