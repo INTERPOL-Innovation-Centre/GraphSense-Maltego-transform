@@ -1,0 +1,4 @@
+Owner,Author,Disclaimer,Description,Version,Name,UIName,URL,entityName,oAuthSettingId,transformSettingIDs,seedIDs
+INTERPOL Innovation Centre,Vincent Danjean <v.danjean@interpol.int>,,Returns the cluster details to which the address belongs.,0.1,tocluster,To Cluster [GRAPHSENSE],http://0.0.0.0:8080/run/tocluster,maltego.Cryptocurrency,,global#api_key;global#api_url,interpol.graphsense
+INTERPOL Innovation Centre,Vincent Danjean <v.danjean@interpol.int>,,Returns details of a cryptocurerncy address.,0.1,todetails,To Details [GRAPHSENSE],http://0.0.0.0:8080/run/todetails,maltego.Cryptocurrency,,global#api_key;global#api_url,interpol.graphsense
+INTERPOL Innovation Centre,Vincent Danjean <v.danjean@interpol.int>,,Returns known attribution tags,0.1,totags,To Tags [GRAPHSENSE],http://0.0.0.0:8080/run/totags,maltego.Cryptocurrency,,global#api_key;global#api_url,interpol.graphsense

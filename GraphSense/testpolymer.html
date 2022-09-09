@@ -1,0 +1,31 @@
+<html>
+<head>
+  <!-- Polyfills only needed for Firefox and Edge. -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
+</head>
+<body>
+  <!-- Loads natively on browsers that support Javascript modules like
+       Chrome, Safari, Firefox 60, Edge 16. For all others, use a
+       module-compatible toolchain like Polymer CLI, WebPack, or Rollup -->
+  <script type="module">
+    import {PolymerElement, html} from 'https://unpkg.com/@polymer/polymer@next/polymer-element.js?module';
+
+    class MyElement extends PolymerElement {
+
+      static get properties() { return { mood: String }}
+
+      static get template() {
+        return html`
+          <style> .mood { color: green; } </style>
+          Web Components are <span class="mood">[[mood]]</span>!
+        `;
+      }
+    }
+
+    customElements.define('my-element', MyElement);
+  </script>
+  
+  <my-element mood="awesome"></my-element>
+
+</body>
+</html>

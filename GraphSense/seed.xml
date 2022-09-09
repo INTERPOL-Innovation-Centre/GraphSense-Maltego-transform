@@ -1,0 +1,31 @@
+<Seed Pos="10" Display="Commercial TAS v3">
+    <Url Visible="true">https://alpine.paterva.com/CTAS31.xml</Url> <!--visible is optional, default "false"--> 
+    <Description>GraphSense transforms.</Description> 
+    <Details>This is the GraphSense API calls ported to Maltego.</Details> 
+    <Modified>1417531063521</Modified> <!-- unix time --> 
+    <Icon><!-- 48x48px png--> 
+        <Url>https://www.paterva.com/web7/images/menu/menu5.png</Url> 
+    </Icon>
+    <Provider>
+        <Name>Interpol</Name>
+        <Website>www.interpol.int</Website>
+        <Email>cntl@interpol.int</Email>
+        <Phone>+33 4 72 44 7000</Phone> 
+    </Provider>
+    <Registration>
+        <Website>http://register.paterva.com</Website>
+    </Registration>
+    <Pricing>
+        <Info>Free for LEAs</Info>
+        <Website>https://www.interpol.int</Website>
+    </Pricing>
+    <Inputs> 
+        <!-- Examples... --> 
+        <Input Name="api-key" Display="API Key" Type="string" Optional="true" Auth="true"/>
+        #<Input Name="username" Display="User Name" Type="string" Auth="true"/> <!-- default for Optional and Auth is "false" --> 
+        #<Input Name="password" Display="Password" Type="string" Auth="true"/> 
+        <Input Name="service-url" Display="The Graphsense API server URI" Type="url" Optional="true" DefaultValue="https://api.graphsense.info"/> 
+        #<Input Name="from" Display="Start Date" Type="date" Optional="true" DefaultValue="1999-04-22"/> 
+        #<Input Name="netblockSize" Display="Netblock Size" Type="string" Optional="false" DefaultValue="10"/> 
+    </Inputs> 
+</Seed>
