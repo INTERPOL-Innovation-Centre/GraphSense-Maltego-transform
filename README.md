@@ -26,9 +26,20 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the bel
 Microsoft Visual C++ 14.0 is required to install [maltego-trx](https://github.com/paterva/maltego-trx)  
 
 ```bash
-pip install maltego-trx  
-pip install requests
+pip3 install maltego-trx  
+pip3 install requests
 ```
+If you already have PIP and Maltego-TRX, make sure you have the latest releases by running something like:
+```bash
+/usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip
+pip3 install --upgrade maltego-trx
+pip3 install --upgrade requests
+```
+
+The below was successfully tested with:
+- pip-22.0.4
+- maltego_trx-1.6.0
+- requests-2.28.1
 
 ## Configuration
 
@@ -36,6 +47,7 @@ You need to provide your own token from the GraphSense API.
 Simply edit the *config.json* file to add your own API Token:  
 - `token`: *12345*
 - `api`: https://api.graphsense.info
+
 
 ## Installation of the required transforms inside Maltego
 
