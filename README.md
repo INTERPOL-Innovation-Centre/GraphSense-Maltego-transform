@@ -45,9 +45,10 @@ The below was successfully tested with:
 
 You need to provide your own token from the GraphSense API.  
 Simply edit the *config.json* file to add your own API Token:  
-- `token`: *12345*
-- `api`: https://api.graphsense.info
-
+- `"api_key": "*12345*",`  
+- `"api_url": "https://api.graphsense.info"`  
+Other GraphSense instances exist such as:  
+- `"api_url": "https://api.ikna.io"`
 
 ## Installation of the required transforms inside Maltego
 
