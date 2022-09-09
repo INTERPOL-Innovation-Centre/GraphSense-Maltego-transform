@@ -113,7 +113,6 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 
 
 	if query_type == "details":
-		#if currency == "cluster":
 		if not ('address' in json_result): # This means this is a cluster not a cryptocurrency address
 			set_type = "maltego.CryptocurrencyWallet"
 			cluster_ID = json_result['entity'] #the Cluster ID is known as "entity" in GraphSense API json result
@@ -130,14 +129,14 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 			else:
 				address = json_result['address']
 			entity = response.addEntity(set_type, address)
-			#entity.addProperty(set_type, value=json_result['address'])
 		
 		entity.addOverlay('', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)# first we reset the overlay
-		if json_result['tags']!= []: # or ('address_tags' in json_result) or ('entity_tags' in json_result):
+		if ('tags' in json_result) or ('best_address_tag' in json_result):
+			tags = json_result['best_address_tag']
 			if not ("Wallet" in set_type):
 				entity.addOverlay('Businessman', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)
 			else:
-				if json_result['tags']['address_tags']!=[] or json_result['tags']['entity_tags']!=[]:#'address_tags' in json_result['tags'] or 'entity_tags' in json_result['tags']:
+				if ('address_tags' in tags) or ('entity_tags' in tags) or ('label' in tags):
 					entity.addOverlay('Businessman', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)
 
 		balance_value = json_result['balance']['value']
@@ -211,8 +210,9 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		entity.addOverlay(json_result['no_addresses'], OverlayPosition.SOUTH_WEST, OverlayType.TEXT)
 		entity.addOverlay(icon_name, OverlayPosition.WEST, OverlayType.IMAGE)
 		entity.addOverlay('', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)# first we reset the overlay
-		if json_result['tags']!= []: # or ('address_tags' in json_result) or ('entity_tags' in json_result):
-			if json_result['tags']['address_tags']!=[] or json_result['tags']['entity_tags']!=[]:
+		if ('tags' in json_result) or ('best_address_tag' in json_result):
+			tags = json_result['best_address_tag']
+			if ('address_tags' in tags) or ('entity_tags' in tags) or ('label' in tags):
 				entity.addOverlay('Businessman', OverlayPosition.NORTH_WEST, OverlayType.IMAGE)
 		
 	if query_type == "tags":
@@ -220,16 +220,19 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		set_type = "maltego.CryptocurrencyOwner"
 		
 		json_result = get_address_details(currency, json_result['address']) # We query the entity to get the "Address" and the "Entity" (cluster) tags if any.
-		if (json_result[1]):
-			error = "Got an error getting the address tags: " + json_result[1]
-			return "", error
-		else:
-			json_result = json_result[0]
+		#if (json_result[1]):
+		#	error = "Got an error getting the address tags: " + json_result[1]
+		#	return "", error
+		#else:
+		#	json_result = json_result[0]
 		
-		if ('tags' in json_result):
-			tags = json_result['tags']
+		if ('tags' in json_result) or ('best_address_tag' in json_result):
+			tags = json_result['best_address_tag']
 			if ('address_tags' in tags):
 				tags = tags['address_tags']
+			else:
+				if ('label' in tags):
+						tags = tags['label']
 			if tags:
 				if "error" in tags:
 					error = str("error in address tags: " + graphsense_tag["error"]["message"])
@@ -266,55 +269,70 @@ def create_entity_with_details(json_result,currency,query_type,response): # Quer
 		else:
 			json_result = json_result[0]
 		
-		if ('tags' in json_result):
-			tags = json_result['tags']
-			if ('entity_tags' in tags):
-				tags = tags['entity_tags']
-				if tags:
-					if "error" in tags:
-						error = str("error in cluser tags: " + graphsense_tag["error"]["message"])
-					# Create new entity for each tag we found
-					# If we have the same tag multiple times, Maltego will merge them automatically
-					for tag in tags:
-						if "label" in tag:
-							entity=response.addEntity("maltego.CryptocurrencyOwner", tag["label"])
-							entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
-							#entity.setType("maltego.CryptocurrencyOwner")
-						if "category" in tag:
-							entity.addProperty("OwnerType", "Owner type", value=tag["category"])
-						if "address" in tag:
-							entity.addProperty("Address", "Address", "strict", value=tag["address"])
-							entity.addProperty("Cryptocurrency", "Cryptocurrency", "strict", value=tag["currency"])
-						if "source" in tag:
-							entity.addProperty("Source_URI", "Source", "strict", value=tag["source"])
-							uri_link = str('<a href="' + str(tag["source"]) + '">' + str(tag["source"]) + '</a>')
-							entity.addDisplayInformation(uri_link,"Source URI")
-						if "abuse" in tag:
-							entity.addProperty("Abuse_type", "Abuse type", value=tag["abuse"])
-			tags = json_result['tags']
-			if ('address_tags' in tags):
-				tags = tags['address_tags']
-				if tags:
-					if "error" in tags:
-						error = str("error in cluster address tags: " + graphsense_tag["error"]["message"])
-					# Create new entity for each tag we found
-					# If we have the same tag multiple times, Maltego will merge them automatically
-					for tag in tags:
-						if "label" in tag:
-							entity=response.addEntity("maltego.CryptocurrencyOwner", tag["label"])
-							entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
-							#entity.setType("maltego.CryptocurrencyOwner")
-						if "category" in tag:
-							entity.addProperty("OwnerType", "Owner type", value=tag["category"])
-						if "address" in tag:
-							entity.addProperty("Address", "Address", "strict", value=tag["address"])
-							entity.addProperty("Cryptocurrency", "Cryptocurrency", "strict", value=tag["currency"])
-						if "source" in tag:
-							uri_link = str('<a href="' + str(tag["source"]) + '">' + str(tag["source"]) + '</a>')
-							entity.addProperty("Source_URI", "Source URI", "strict", value=str(tag["source"]))
-							entity.addDisplayInformation(uri_link,"Source URI")
-						if "abuse" in tag:
-							entity.addProperty("Abuse_type", "Abuse type", value=tag["abuse"])
+		if ('best_address_tag' in json_result):
+			tag = json_result['best_address_tag']
+			if "label" in tag:
+				entity=response.addEntity("maltego.CryptocurrencyOwner", tag["label"])
+				entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
+				#entity.setType("maltego.CryptocurrencyOwner")
+			if "category" in tag:
+				entity.addProperty("OwnerType", "Owner type", value=tag["category"])
+			if "address" in tag:
+				entity.addProperty("Address", "Address", "strict", value=tag["address"])
+				entity.addProperty("Cryptocurrency", "Cryptocurrency", "strict", value=tag["currency"])
+			if "source" in tag:
+				entity.addProperty("Source_URI", "Source", "strict", value=tag["source"])
+				uri_link = str('<a href="' + str(tag["source"]) + '">' + str(tag["source"]) + '</a>')
+				entity.addDisplayInformation(uri_link,"Source URI")
+			if "abuse" in tag:
+				entity.addProperty("Abuse_type", "Abuse type", value=tag["abuse"])
+#			if ('entity_tags' in tags):
+#				tags = tags['entity_tags']
+#				if tags:
+#					if "error" in tags:
+#						error = str("error in cluser tags: " + graphsense_tag["error"]["message"])
+#					# Create new entity for each tag we found
+#					# If we have the same tag multiple times, Maltego will merge them automatically
+#					for tag in tags:
+#						if "label" in tag:
+#							entity=response.addEntity("maltego.CryptocurrencyOwner", tag["label"])
+#							entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
+#							#entity.setType("maltego.CryptocurrencyOwner")
+#						if "category" in tag:
+#							entity.addProperty("OwnerType", "Owner type", value=tag["category"])
+#						if "address" in tag:
+#							entity.addProperty("Address", "Address", "strict", value=tag["address"])
+#							entity.addProperty("Cryptocurrency", "Cryptocurrency", "strict", value=tag["currency"])
+#						if "source" in tag:
+#							entity.addProperty("Source_URI", "Source", "strict", value=tag["source"])
+#							uri_link = str('<a href="' + str(tag["source"]) + '">' + str(tag["source"]) + '</a>')
+#							entity.addDisplayInformation(uri_link,"Source URI")
+#						if "abuse" in tag:
+#							entity.addProperty("Abuse_type", "Abuse type", value=tag["abuse"])
+#			tags = json_result['best_address_tag]
+#			if ('address_tags' in tags):
+#				tags = tags['address_tags']
+#				if tags:
+#					if "error" in tags:
+#						error = str("error in cluster address tags: " + graphsense_tag["error"]["message"])
+#					# Create new entity for each tag we found
+#					# If we have the same tag multiple times, Maltego will merge them automatically
+#					for tag in tags:
+#						if "label" in tag:
+#							entity=response.addEntity("maltego.CryptocurrencyOwner", tag["label"])
+#							entity.setLinkLabel("To tags [GraphSense] (" + tag["currency"] + ")")
+#							#entity.setType("maltego.CryptocurrencyOwner")
+#						if "category" in tag:
+#							entity.addProperty("OwnerType", "Owner type", value=tag["category"])
+#						if "address" in tag:
+#							entity.addProperty("Address", "Address", "strict", value=tag["address"])
+#							entity.addProperty("Cryptocurrency", "Cryptocurrency", "strict", value=tag["currency"])
+#						if "source" in tag:
+#							uri_link = str('<a href="' + str(tag["source"]) + '">' + str(tag["source"]) + '</a>')
+#							entity.addProperty("Source_URI", "Source URI", "strict", value=str(tag["source"]))
+#							entity.addDisplayInformation(uri_link,"Source URI")
+#						if "abuse" in tag:
+#							entity.addProperty("Abuse_type", "Abuse type", value=tag["abuse"])
 		else:
 			error = "No attribution tags found for this cluster"
 			
