@@ -1,3 +1,4 @@
 maltego-trx
 urllib3
 gunicorn
+requests

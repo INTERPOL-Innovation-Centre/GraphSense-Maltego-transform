@@ -15,7 +15,7 @@ Images on this page are our own, and made from Maltego 4.2.19 Enterprise.
 
 ## Disclaimer
 This set of tools is provided as-is with no guaranty of accuracy.  
-Check the facts before building your case on the finding from this tool.
+Check the facts before building your case on the finding from this tool.  
 
 ## Prerequisite
 
@@ -25,21 +25,23 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the bel
 
 Microsoft Visual C++ 14.0 is required to install [maltego-trx](https://github.com/paterva/maltego-trx)  
 
-```bash
+```bash  
 pip3 install maltego-trx  
-pip3 install requests
+pip3 install requests  
+```  
+If you already have PIP and Maltego-TRX, make sure you have the latest releases by running something like:  
+```bash  
+/usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip  
+pip3 install --upgrade maltego-trx  
+pip3 install --upgrade requests  
 ```
-If you already have PIP and Maltego-TRX, make sure you have the latest releases by running something like:
-```bash
-/usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip
-pip3 install --upgrade maltego-trx
-pip3 install --upgrade requests
-```
+And check the [graphsense-python](https://github.com/graphsense/graphsense-python) instructions.  
 
-The below was successfully tested with:
-- pip-22.0.4
-- maltego_trx-1.6.0
-- requests-2.28.1
+The below was successfully tested with:  
+- pip-22.2.2  
+- maltego_trx-1.6.0  
+- requests-2.28.1  
+- [graphsense-python-1.0.1](https://github.com/graphsense/graphsense-python)  
 
 ## Configuration
 
@@ -48,13 +50,13 @@ Simply edit the *config.json* file to add your own API Token:
 - `"api_key": "*12345*",`  
 - `"api_url": "https://api.graphsense.info"`  
 Other GraphSense instances exist such as:  
-- `"api_url": "https://api.ikna.io"`
+- `"api_url": "https://api.ikna.io"`  
 
 ## Installation of the required transforms inside Maltego
 
 Clone this repository to a local folder on your machine.  
 
-In Maltego, from the transform hub, install:
+In Maltego, from the transform hub, install:  
 - the *Blockchain.info (Bitcoin) by Paterva* to work with Bitcoin Address Entities. 
 - the *Tatum Blockchain Explorer by Maltego Technologies*, it adds support for other cryptocurrencies [(list here)](https://docs.tatum.io/supported-blockchains). The Tatum transforms run out of the box but you may consider getting your own free API key for more queries a month by registering at: [https://dashboard.tatum.io](https://dashboard.tatum.io)  
 
@@ -79,7 +81,7 @@ Click on *Next>*
 - ```python3``` by default for Mac OS X. (See "*Troubleshooting for Mac*"[^1] below if you experience problems).  
 
 4/ In the *Command parameters* box, type:  
-```project.py local todetails```
+```project.py local todetails```  
 "totags" is one of the transforms available. Please see 6/ below.  
 
 5/ In the *Working directory* box, insert the full path to the folder where you have cloned this project.  
@@ -89,17 +91,17 @@ If all is good, your configuration should look similar to the above.
 Click on *Finish*  
 
 6/ You need to repeat 1/ to 5/ above for each of the transforms contained in this set:
-- To Tags (project.py local totags)
-- To Cluster (project.py local tocluster)
+- To Tags (project.py local totags)  
+- To Cluster (project.py local tocluster)  
 
 7/ Import the GraphSense Entities:  
 For this, go to *Entities* tab, click on *Import Entities*  
 Browse to and select the "Graphsense Entities.mtz" file. Click *Next>*  
 Tick both the *Entities* and the *Icons* boxes to import everything. Click *Next>*  
 
-Click on *Finish*
+Click on *Finish*  
 
--- Done ! --
+-- Done ! --  
 
 ## Use
 
@@ -111,7 +113,7 @@ As with any other Maltego Transform, all that is needed is a right-click on the 
 <img src="images/Cluster.png" height="100px">  
 
 The illustration above is a cluster in the Graphsense meaning. It is an item that ties together several cryptocurrency adresses that the GraphSense algorithms and euristics have found to be controlled by one same entity.  
-If the cluster tags is accompanied by a businessman on the top left corner overlay,  -like in the illustration above-, this implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.
+If the cluster tags is accompanied by a businessman on the top left corner overlay,  -like in the illustration above-, this implies that the cluster or some of the cryptocurrencies within have been associated with attribution tags.  
 In a cluster shows a businessman, use the "to tags" transform to display the associated tag(s).  
 The number on the left, below the businessman represents the number of cryptocurrency addresses belonging to that cluster.  
 
@@ -143,4 +145,4 @@ To check which Python Maltego is effectively using, set the tranform with the `C
 Run the transform once and look for the result in the debug output box.  
 This will give you the path to the python version used by the Maltego app.  
 It needs to be the same path as the pip used above (check by runing ```pip -V``` in terminal).  
-If it isn't, try with pip3 instead of pip. You may need to reinstall the Prerequisites above once this pip and python path is fixed.
+If it isn't, try with pip3 instead of pip. You may need to reinstall the Prerequisites above once this pip and python path is fixed.  
