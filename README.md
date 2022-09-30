@@ -17,6 +17,10 @@ Images on this page are our own, and made from Maltego 4.2.19 Enterprise.
 This set of tools is provided as-is with no guaranty of accuracy.  
 Check the facts before building your case on the finding from this tool.  
 
+*Prior to working on this repository and its contents, please make sure your agree to our [disclaimer](https://github.com/INTERPOL-Innovation-Centre/DISCLAIMER)*  
+*This repository only contains the code, not the police data. Please do not store your TagPack(s) in this repository.*  
+*Please let us know by opening an [Issue](https://github.com/INTERPOL-Innovation-Centre/GraphSense-Maltego-transform/issues) if you want to suggest a new feature or data source or find a bug.*
+
 ## Prerequisite
 
 Works with Python3  
