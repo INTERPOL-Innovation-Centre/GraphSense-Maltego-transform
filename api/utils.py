@@ -1,4 +1,4 @@
-from maltego_trx.maltego import MaltegoEntity, MaltegoTransform, Phrase
+from maltego_trx.maltego import MaltegoEntity, MaltegoTransform
 from maltego_trx.overlays import OverlayPosition, OverlayType
 
 from graphsense.configuration import Configuration
