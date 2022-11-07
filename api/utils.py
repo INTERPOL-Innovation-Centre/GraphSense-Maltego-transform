@@ -4,7 +4,6 @@ from maltego_trx.overlays import OverlayPosition, OverlayType
 from graphsense.configuration import Configuration
 
 import json
-from jsonmerge import merge
 
 import re as regex
 
