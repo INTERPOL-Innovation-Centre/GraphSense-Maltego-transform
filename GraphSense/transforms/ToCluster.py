@@ -49,7 +49,7 @@ class ToCluster(DiscoverableTransform):
 				if "(404)" in results[2]:
 					responseMaltego.addUIMessage("\nNothing found in " + currency + " for : " + str(address) + "\n",UIM_INFORM)
 				else:
-					responseMaltego.addUIMessage(results[2],UIM_INFORM)
+					responseMaltego.addUIMessage("There was an unknown error: " + results[2] + "\n",UIM_INFORM)
 				#return
 			else:
 				responses = create_entity_with_details(results,currency,query_type, responseMaltego)
@@ -59,7 +59,7 @@ class ToCluster(DiscoverableTransform):
 					if "(404)" in responses[1]:
 						responseMaltego.addUIMessage("\nNothing found in " + currency + " for : " + str(address) + "\n",UIM_INFORM)
 					else:
-						responseMaltego.addUIMessage(responses[1],UIM_INFORM)
+						responseMaltego.addUIMessage("There was an unknown error: " + responses[1] + "\n",UIM_INFORM)
 		return
 
 if __name__ == "__main__":

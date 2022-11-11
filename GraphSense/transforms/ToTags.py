@@ -46,12 +46,12 @@ class ToTags(DiscoverableTransform):
 			else:#i.e. if query_type is entity_tags (for clusters)
 				results = get_entity_details(currency,address)
 			if results[2] :
-				if "504 Bad Gateway" in results[1]:# the Graphsense server is missing a </hr> in its HTTP504 response page which bugs Maltego hence the below. handling...
+				if "504 Bad Gateway" in results[2]:# the Graphsense server is missing a </hr> in its HTTP504 response page which bugs Maltego hence the below. handling...
 					responseMaltego.addUIMessage("\nThere was a Graphsense server 504 Bad Gateway response running the query " + query_type + " for " + currency + "\n",UIM_INFORM)
 				if "(404)" in results[2]:
 					responseMaltego.addUIMessage("\nNothing found in " + currency + " for : " + str(address) + "\n",UIM_INFORM)
 				else:
-					responseMaltego.addUIMessage(results[2],UIM_INFORM)
+					responseMaltego.addUIMessage("There was an unknown error: " + results[2] + "\n",UIM_INFORM)
 				#return
 			else:
 				responses = create_entity_with_details(results,currency,query_type, responseMaltego)
@@ -61,7 +61,7 @@ class ToTags(DiscoverableTransform):
 					if "(404)" in responses[1]:
 						responseMaltego.addUIMessage("\nNothing found in " + currency + " for : " + str(address) + "\n",UIM_INFORM)
 					else:
-						responseMaltego.addUIMessage(responses[1],UIM_INFORM)
+						responseMaltego.addUIMessage("There was an unknown error: " + responses[1] + "\n",UIM_INFORM)
 		return
 
 if __name__ == "__main__":
