@@ -18,7 +18,7 @@ def open_config():
 		with open("config.json") as json_data_file:
 			config = json.load(json_data_file)
 		if "api_key" not in config or "api_url" not in config:
-			print("Error message: Cannot load data from config.json file")
+			print("Error message: Check the format of your config.json file")
 		else:
 			configuration = Configuration(
 			host = config["api_url"],
