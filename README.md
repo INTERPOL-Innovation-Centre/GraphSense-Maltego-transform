@@ -26,26 +26,29 @@ Check the facts before building your case on the finding from this tool.
 Works with Python3  
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the below required python librairies.  
-
-Microsoft Visual C++ 14.0 is required to install [maltego-trx](https://github.com/paterva/maltego-trx)  
-
+Install Microsoft Visual C++ 14.0 or higher. It is required to install [maltego-trx](https://github.com/paterva/maltego-trx), below.  
 ```bash  
 pip3 install maltego-trx  
 pip3 install requests  
 ```  
-If you already have PIP and Maltego-TRX, make sure you have the latest releases by running something like:  
-```bash  
-/usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip  
-pip3 install --upgrade maltego-trx  
-pip3 install --upgrade requests  
+Check the [graphsense-python](https://github.com/graphsense/graphsense-python) instructions to setup the required Python API tools from GraphSense.  
+Normally, this is done by running:  
+```bash
+pip3 install git+https://github.com/graphsense/graphsense-python.git
 ```
-And check the [graphsense-python](https://github.com/graphsense/graphsense-python) instructions.  
 
-The below was successfully tested with:  
-- pip-22.2.2  
+### Updating a previous install
+If you already have PIP, Maltego-TRX, and other prerequisits please make sure you have the latest releases.  
+```bash  
+python3 -m pip install --upgrade pip  
+pip3 install --upgrade maltego-trx requests git+https://github.com/graphsense/graphsense-python.git
+```  
+
+All of this was successfully tested with:  
+- pip-23.0.1  
 - maltego_trx-1.6.0  
 - requests-2.28.1  
-- [graphsense-python-1.0.1](https://github.com/graphsense/graphsense-python)  
+- [graphsense-python API v1.2](https://github.com/graphsense/graphsense-python)  
 
 ## Configuration
 
@@ -150,3 +153,6 @@ Run the transform once and look for the result in the debug output box.
 This will give you the path to the python version used by the Maltego app.  
 It needs to be the same path as the pip used above (check by runing ```pip -V``` in terminal).  
 If it isn't, try with pip3 instead of pip. You may need to reinstall the Prerequisites above once this pip and python path is fixed.  
+If you are unsure which python you are using, run "which python3".  
+You may use an alias to point to the correct python or pip.  
+Another issue you may face is an error in validating SSL certificates. In this case, run ```/Applications/Python\ 3.11/Install\ Certificates.command``` to fix the root certificates on your Mac. Please refer to: https://stackoverflow.com/a/58525755.
