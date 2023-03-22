@@ -45,10 +45,10 @@ pip3 install --upgrade maltego-trx requests git+https://github.com/graphsense/gr
 ```  
 
 All of this was successfully tested with:  
-- pip-22.3.1  
+- pip-23.0.1  
 - maltego_trx-1.6.0  
 - requests-2.28.1  
-- [graphsense-python API v1.1.1](https://github.com/graphsense/graphsense-python)  
+- [graphsense-python API v1.2](https://github.com/graphsense/graphsense-python)  
 
 ## Configuration
 
