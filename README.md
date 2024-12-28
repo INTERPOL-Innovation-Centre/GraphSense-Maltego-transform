@@ -11,6 +11,9 @@ Vincent Graber
 [github/grarbervi](https://github.com/grabervi)  
 Vincent Danjean  
 [github/VinceICPO](https://github.com/vinceicpo)  
+Ikna.io
+[Soad003](https://github.com/soad003)  
+
 Images on this page are our own, and made from Maltego 4.2.19 Enterprise.  
 
 ## Disclaimer
