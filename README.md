@@ -6,7 +6,7 @@ The tranforms enable simple queries on GraphSense data and tag-packs to obtain t
 |<img src="images/bitcoin.png" height="80"><img src="images/bitcoincash.png" height="80"><img src="images/litecoin.png" height="80"><img src="images/zcash.png" height="80"><img src="images/ethereum.png" height="80">|  
 |![A screen copy of the transform result in Maltego](images/Maltego%20BTC%20to%20GraphSense%20Tags.png?raw=true "Maltego BTC GraphSense Tag")|  
 
-## Authors and attribution
+## Original authors and attribution
 Vincent Graber  
 [github/grarbervi](https://github.com/grabervi)  
 Vincent Danjean  
@@ -45,10 +45,10 @@ pip3 install --upgrade maltego-trx requests git+https://github.com/graphsense/gr
 ```  
 
 All of this was successfully tested with:  
-- pip-23.0.1  
-- maltego_trx-1.6.0  
-- requests-2.28.1  
-- [graphsense-python API v1.2](https://github.com/graphsense/graphsense-python)  
+- pip-24.3.1  
+- maltego_trx-1.6.1  
+- requests-2.3.1  
+- [graphsense-python API v1.8.1](https://github.com/graphsense/graphsense-python)  
 
 ## Configuration
 
