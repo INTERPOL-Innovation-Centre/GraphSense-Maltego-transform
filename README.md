@@ -48,6 +48,7 @@ pip3 install --upgrade maltego-trx requests git+https://github.com/graphsense/gr
 ```  
 
 All of this was successfully tested with:  
+- python 3.12  
 - pip-24.3.1  
 - maltego_trx-1.6.1  
 - requests-2.3.1  
