@@ -11,7 +11,7 @@ from api.utils import (
     get_entity_details,
 )
 
-from .utils import set_maltego_transformation_error
+#from .utils import set_maltego_transformation_error
 
 
 @registry.register_transform(
