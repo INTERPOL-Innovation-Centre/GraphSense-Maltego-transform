@@ -104,6 +104,7 @@ Click on *Finish*
 6/ You need to repeat 1/ to 5/ above for each of the transforms contained in this set:
 - To Tags (project.py local totags)  
 - To Cluster (project.py local tocluster)  
+- To Input Addresses (project.py local toinputaddresses)
 
 7/ Import the GraphSense Entities:  
 For this, go to *Entities* tab, click on *Import Entities*  
