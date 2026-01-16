@@ -3,16 +3,8 @@ from maltego_trx.maltego import MaltegoMsg, MaltegoTransform, UIM_INFORM
 from maltego_trx.transform import DiscoverableTransform
 
 from extensions import registry
-
-from api.utils import (
-    create_entity_with_details,
-    get_currency_from_entity_details,
-    get_address_details,
-    get_entity_details,
-)
-
-from .utils import set_maltego_transformation_error
-
+from api.utils import create_entity_with_details, get_address_details, get_entity_details
+from .utils import set_maltego_transformation_error, extract_address_and_currencies
 
 @registry.register_transform(
     display_name="To Tags",
@@ -26,66 +18,28 @@ class ToTags(DiscoverableTransform):
     """
 
     @classmethod
-    def create_entities(
-        cls, request: MaltegoMsg, responseMaltego: MaltegoTransform
-    ):
+    def create_entities(cls, request: MaltegoMsg, response: MaltegoTransform):
+        address, currencies, error = extract_address_and_currencies(request.Properties)
 
-        query_type = "tags"
+        if error:
+            response.addUIMessage(error, UIM_INFORM)
+            return
 
-        entity_details = request.Properties
-        if (
-            "cryptocurrency.wallet.name" in entity_details
-        ):  # If so, we are looking for tags in a cluster
-            query_type = "entity_tags"
-            address = int(entity_details["cluster_ID"])
-            currencies = [
-                str(entity_details["currency"])
-            ]  # if it is a cluster the currency is known
-        # if 'properties.cryptocurrencyaddress' in entity_details: #Else, we are looking for tags on a specific address
-        # 		address = str(entity_details['properties.cryptocurrencyaddress'])
-        else:
-            if (
-                "currency" in entity_details
-            ):  # if a currency is already specified in the details, we use that currency and only that one. Else, we try to figure out what currency this could be and check all.
-                currencies = [entity_details["currency"]]
-            else:
-                currencies = get_currency_from_entity_details(
-                    request.Properties
-                )  # We use regex to check what Cryptocurrency this is. This could return BTC and BCH since they are similar.
-                if currencies[1]:
-                    responseMaltego.addUIMessage(
-                        "\n" + currencies[1] + "\n", UIM_INFORM
-                    )
-                    return
-                currencies = currencies[0]
-            address = entity_details["properties.cryptocurrencyaddress"]
+        is_wallet = "cryptocurrency.wallet.name" in request.Properties or "cluster_ID" in request.Properties
+        query_type = "entity_tags" if is_wallet else "tags"
 
         for currency in currencies:
-            # :#i.e.: for cryptocurrency addresses
-            addr_or_entity, tags, error = (
-                get_address_details(currency, address)
-                if (query_type == "tags")
-                else get_entity_details(currency, address)
-            )
-
-            if error:
-                set_maltego_transformation_error(
-                    responseMaltego, currency, query_type, str(address), error
-                )
-
+            if is_wallet:
+                obj, tags, api_error = get_entity_details(currency, int(address))
             else:
-                addr_or_entity, error = create_entity_with_details(
-                    (addr_or_entity, tags, error),
-                    currency,
-                    query_type,
-                    responseMaltego,
-                )
-                if error:
-                    set_maltego_transformation_error(
-                        responseMaltego, currency, str(address), error
-                    )
-        return
+                obj, tags, api_error = get_address_details(currency, address)
 
+            if api_error:
+                set_maltego_transformation_error(response, currency, query_type, address, api_error)
+            else:
+                _, err = create_entity_with_details((obj, tags, ""), currency, query_type, response)
+                if err:
+                    set_maltego_transformation_error(response, currency, query_type, address, err)
 
 if __name__ == "__main__":
     ToTags.create_entities(sys.argv[1])
